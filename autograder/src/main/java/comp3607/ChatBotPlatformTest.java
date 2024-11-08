@@ -20,11 +20,11 @@ public class ChatBotPlatformTest {
         MethodTest addChatBot = new MethodTest("addChatBot", addChatBotCriteria);
         chatBotPlatform.addTest(addChatBot);
 
-        MethodCriteria getChatBotListCriteria = new MethodCriteria("public", "String", List.of());
+        MethodCriteria getChatBotListCriteria = new MethodCriteria("public", "java.lang.String", List.of());
         MethodTest getChatBotList = new MethodTest("getChatBotList", getChatBotListCriteria);
         chatBotPlatform.addTest(getChatBotList);
 
-        MethodCriteria InteractWithBotCriteria = new MethodCriteria("public", "String", List.of(int.class, String.class));
+        MethodCriteria InteractWithBotCriteria = new MethodCriteria("public", "java.lang.String", List.of(int.class, String.class));
         MethodTest InteractWithBot = new MethodTest("InteractWithBot", InteractWithBotCriteria);
         chatBotPlatform.addTest(InteractWithBot);
 

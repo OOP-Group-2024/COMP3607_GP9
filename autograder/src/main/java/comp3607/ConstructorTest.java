@@ -26,12 +26,13 @@ public class ConstructorTest extends Test {
         Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
         List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
         Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        //Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        //Assertions.assertEquals(expectedParameterTypes, parameterTypes,
-        // "Constructor has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
         Assertions.assertEquals(mutableParameterTypes, parameterTypes,
          "Constructor has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
 
+        //Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+        //Assertions.assertEquals(expectedParameterTypes, parameterTypes,
+        // "Constructor has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
+        
     }
 
     public void checkConstructorInvocation(Constructor<?> constructor, Report report, Object... args) {

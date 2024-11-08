@@ -3,6 +3,7 @@ package comp3607;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,10 +38,14 @@ public class MethodTest extends Test {
             List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
             Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
             List<Class<?>> expectedParameterTypes = methodCriteria.getExpectedParameterTypes();
-            Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-            Assertions.assertEquals(expectedParameterTypes, parameterTypes, 
-                "Method has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
-           
+            //Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+            //Assertions.assertEquals(expectedParameterTypes, parameterTypes, 
+            //    "Method has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
+            List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
+            Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+            Assertions.assertEquals(mutableParameterTypes, parameterTypes,
+             "Constructor has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
+    
     }
    
     @Override
