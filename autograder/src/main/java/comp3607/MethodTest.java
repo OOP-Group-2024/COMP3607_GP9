@@ -32,8 +32,8 @@ public class MethodTest extends Test {
         String actualReturnType = method.getReturnType().getName();
         Assertions.assertEquals(methodCriteria.getExpectedReturnType(), actualReturnType, 
             "Method has incorrect return type: " + actualReturnType + ", expected: " + methodCriteria.getExpectedReturnType());
-
     }
+    
     public void checkParameterTypes(Method method, Report report) {
             List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
             Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));

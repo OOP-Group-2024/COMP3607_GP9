@@ -1,38 +1,36 @@
 package comp3607;
 
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 
 public class ChatBotPlatform {
 
     // List to hold the chatbots
-    private List<ChatBot> chatBots;
+    private ArrayList<ChatBot> bots;
 
     // Constructor
     public ChatBotPlatform() {
-        chatBots = new ArrayList<>();
+        bots = new ArrayList<ChatBot>();
     }
 
     // Method to add a ChatBot
-    public boolean addChatBot(ChatBot chatBot) {
-        chatBots.add(chatBot);
+    public boolean addChatBot(int num) {
         return true;
     }
 
     // Method to get the list of all chatbots
     public String getChatBotList() {
-        return "Should Fail";
+        return "Test String";
     }
 
     // Method to interact with a specific bot
-    public String interactWithBot(String botName, String userInput) {
+    public String InteractWithBot(int num, String userInput) {
         
-        return "Bot not found.";
+        return "Test String";
     }
 
     // Method to generate a new ChatBot with predefined settings (example)
     public String generateChatBot(String name) {
-        String str = "This should fail";
-        return str;
+        return "Test String";
     }
 }

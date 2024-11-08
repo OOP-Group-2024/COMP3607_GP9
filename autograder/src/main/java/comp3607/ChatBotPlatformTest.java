@@ -5,11 +5,11 @@ import java.util.List;
 public class ChatBotPlatformTest {
     
     TestGroup chatBotPlatform = new TestGroup();
-
+    private Report report = new Report();
     public void setUp() {
 
 
-        VariableCriteria botsCritera = new VariableCriteria("private", "ArrayList<ChatBot>");
+        VariableCriteria botsCritera = new VariableCriteria("private", "ArrayList");
         VariableTest bots = new VariableTest("bots", botsCritera);
         chatBotPlatform.addTest(bots);
 
@@ -28,7 +28,6 @@ public class ChatBotPlatformTest {
         MethodTest InteractWithBot = new MethodTest("InteractWithBot", InteractWithBotCriteria);
         chatBotPlatform.addTest(InteractWithBot);
 
-        Report report = new Report();
         chatBotPlatform.executeTest(ChatBotPlatform.class, report);
         System.out.println(report.generateReport());
     }
