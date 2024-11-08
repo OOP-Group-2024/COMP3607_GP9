@@ -6,8 +6,9 @@ public class ChatBotPlatformTest {
     
     TestGroup chatBotPlatform = new TestGroup();
     private Report report = new Report();
-    public void setUp() {
 
+
+    public void setUp() {
 
         VariableCriteria botsCritera = new VariableCriteria("private", "ArrayList");
         VariableTest bots = new VariableTest("bots", botsCritera);
@@ -30,6 +31,7 @@ public class ChatBotPlatformTest {
 
         chatBotPlatform.executeTest(ChatBotPlatform.class, report); 
     }
+
     public void printReport(){
         System.out.println(report.generateReport());
     }

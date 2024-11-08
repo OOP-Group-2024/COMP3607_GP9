@@ -20,7 +20,6 @@ public class ChatBotPlatform {
     }
 
     public String InteractWithBot(int num, String userInput) {
-        
         return "Test String";
     }
 
