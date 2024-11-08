@@ -6,7 +6,7 @@ package comp3607;
 public class App {
     public static void main(String[] args) {
         System.out.println("Testing:\n");
-        TestExample test = new TestExample();
+        ChatBotPlatformTest test = new ChatBotPlatformTest();
         test.setUp();
     }
 }

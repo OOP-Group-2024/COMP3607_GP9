@@ -27,5 +27,9 @@ public class ChatBotPlatformTest {
         MethodCriteria InteractWithBotCriteria = new MethodCriteria("public", "String", List.of(int.class, String.class));
         MethodTest InteractWithBot = new MethodTest("InteractWithBot", InteractWithBotCriteria);
         chatBotPlatform.addTest(InteractWithBot);
+
+        Report report = new Report();
+        chatBotPlatform.executeTest(ChatBotPlatform.class, report);
+        System.out.println(report.generateReport());
     }
 }
