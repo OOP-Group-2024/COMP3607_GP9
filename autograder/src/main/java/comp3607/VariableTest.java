@@ -22,9 +22,9 @@ public class VariableTest extends Test {
         String expectedAccessModifier = variableCriteria.getExpectedAccessModifier();
         try{
             Assertions.assertEquals(expectedAccessModifier, actualModifier);
-            report.addPassedTest("Variable: "+ variableName +"\tCorrect access modifier");    
+            report.addPassedTest(String.format("Variable: %-18s Correct access Modifier", variableName));    
         } catch (AssertionError e) {
-            report.addError("Variable: " + variableName + "\tIncorrect access modifier. Expected - " + expectedAccessModifier + ",   Declared - " + actualModifier);
+            report.addError(String.format("Variable: %-18s Incorrect access modifer. Expected - %s, Declared - %s", variableName ,expectedAccessModifier, actualModifier));
         }
     }
 
@@ -33,9 +33,10 @@ public class VariableTest extends Test {
         String expectedType = variableCriteria.getExpectedType();
         try{
             Assertions.assertEquals(expectedType, actualType);
-            report.addPassedTest("Variable: " + variableName + "\tCorrect type");    
+            report.addPassedTest(String.format("Variable: %-18s Correct type", variableName));    
         } catch (AssertionError e) {
-            report.addError("Variable: " + variableName + "\tIncorrect type. Expected - " + variableCriteria.getExpectedType() + ",   Declared - " + actualType);
+            //report.addError("Variable: " + variableName + "\tIncorrect type. Expected - " + variableCriteria.getExpectedType() + ",   Declared - " + actualType);
+            report.addError(String.format("Variable: %-18s Incorrect type. Expected - %s, Declared - %s", variableName, expectedType, actualType));
         }
     }
 

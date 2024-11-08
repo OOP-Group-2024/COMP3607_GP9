@@ -28,7 +28,9 @@ public class ChatBotPlatformTest {
         MethodTest InteractWithBot = new MethodTest("InteractWithBot", InteractWithBotCriteria);
         chatBotPlatform.addTest(InteractWithBot);
 
-        chatBotPlatform.executeTest(ChatBotPlatform.class, report);
+        chatBotPlatform.executeTest(ChatBotPlatform.class, report); 
+    }
+    public void printReport(){
         System.out.println(report.generateReport());
     }
 }
