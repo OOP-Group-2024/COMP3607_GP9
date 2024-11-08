@@ -11,6 +11,7 @@ public class TestExample {
     // Example: Adding a method test for a method with specific criteria
         MethodCriteria methodCriteria = new MethodCriteria( "public", "void", List.of(String.class));
         MethodTest mTest = new MethodTest("MethodName", methodCriteria);
+        System.out.println("Test");
         classTestGroup.addTest(mTest);
 
         // Example: Adding a variable test for a variable with specific criteria
