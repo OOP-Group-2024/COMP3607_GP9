@@ -5,10 +5,10 @@ import java.util.List;
 public class MethodCriteria {
     private final String expectedAccessModifier;
     private final String expectedReturnType;
-    private final List<String> expectedParameterTypes;
+    private final List<Class<?>> expectedParameterTypes;
 
     // Constructor
-    public MethodCriteria(String accessModifier, String returnType, List<String> parameterTypes) {
+    public MethodCriteria(String accessModifier, String returnType, List<Class<?>> parameterTypes) {
         this.expectedAccessModifier = accessModifier;
         this.expectedReturnType = returnType;
         this.expectedParameterTypes = parameterTypes;
@@ -22,7 +22,7 @@ public class MethodCriteria {
         return expectedReturnType;
     }
 
-    public List<String> getExpectedParameterTypes() {
+    public List<Class<?>> getExpectedParameterTypes() {
         return expectedParameterTypes;
     }
 }

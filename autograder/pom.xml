@@ -13,7 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>23</maven.compiler.release>
   </properties>
 
   <dependencyManagement>
@@ -27,18 +27,18 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
+  
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <scope>test</scope>
+    <scope>compile</scope>
     </dependency>
     <!-- Optionally: parameterized tests support -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 

@@ -9,11 +9,16 @@ public class TestCriteria {
     private final Map<String, MethodCriteria> expectedMethods = new HashMap<>();
     private final Map<String, VariableCriteria> expectedVariables = new HashMap<>();
 
+    public TestCriteria(String className, String accessModifier) {
+        this.expectedClassName = className;
+        this.expectedAccessModifier = accessModifier;
+    }
+
     public String getExpectedClassName() {
         return expectedClassName;
     }
 
-    public String getExpectedAccessMpodifier() {
+    public String getExpectedAccessModifier() {
         return expectedAccessModifier;
     }
 
