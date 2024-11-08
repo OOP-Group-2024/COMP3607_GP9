@@ -11,15 +11,13 @@ import org.junit.jupiter.api.Assertions;
 public class ConstructorTest extends Test {
     private final List<Class<?>> expectedParameterTypes;
     private final List<Object> expectedInputs;
-    private final List<Object> expectedOutputs;
-    private final List<Object> possibleInputs;
 
 
-    public ConstructorTest(List<Class<?>> parameterTypes, List<Object> inputs, List<Object> outputs, List<Object> possibleInputs) {    
+
+    public ConstructorTest(List<Class<?>> parameterTypes, List<Object> inputs) {    
         this.expectedParameterTypes = parameterTypes;
         this.expectedInputs = inputs;  
-        this.expectedOutputs = outputs;
-        this.possibleInputs = possibleInputs; 
+ 
     }
 
     public void checkParameterTypes(Constructor<?> constructor, Report report) {

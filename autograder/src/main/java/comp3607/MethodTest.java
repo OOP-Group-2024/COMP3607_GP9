@@ -14,7 +14,7 @@ public class MethodTest extends Test {
     private final MethodCriteria methodCriteria;
     private final String methodName;
 
-    public MethodTest(MethodCriteria methodCriteria, String methodName) {
+    public MethodTest(String methodName, MethodCriteria methodCriteria) {
 
         this.methodCriteria = methodCriteria;
         this.methodName = methodName;

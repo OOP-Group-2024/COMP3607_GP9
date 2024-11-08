@@ -9,7 +9,7 @@ public class VariableTest extends Test {
     private final VariableCriteria variableCriteria;
     private final String variableName;
     
-    public VariableTest(VariableCriteria variableCriteria, String variableName) {
+    public VariableTest(String variableName, VariableCriteria variableCriteria) {
         this.variableName = variableName;
         this.variableCriteria = variableCriteria;
     }
