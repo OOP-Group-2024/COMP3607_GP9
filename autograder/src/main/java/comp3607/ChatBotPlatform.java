@@ -7,7 +7,7 @@ public class ChatBotPlatform {
 
     // List to hold the chatbots
     private ArrayList<ChatBot> bots;
-
+    
     // Constructor
     public ChatBotPlatform() {
         bots = new ArrayList<ChatBot>();
