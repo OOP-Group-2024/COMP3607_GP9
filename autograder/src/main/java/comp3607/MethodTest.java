@@ -20,19 +20,20 @@ public class MethodTest extends Test {
         this.methodName = methodName;
     }
 
-    public void checkAccessModifier(Method method) { 
+    public void checkAccessModifier(Method method, Report report) {
+        
         String actualModifier = Modifier.toString(method.getModifiers());
         Assertions.assertEquals(methodCriteria.getExpectedAccessModifier(), actualModifier, 
             "Method has incorrect access modifier: " + actualModifier + ", expected: " + methodCriteria.getExpectedAccessModifier());
 
     }
-    public void checkReturnType(Method method) {
+    public void checkReturnType(Method method, Report report) {
         String actualReturnType = method.getReturnType().getName();
         Assertions.assertEquals(methodCriteria.getExpectedReturnType(), actualReturnType, 
             "Method has incorrect return type: " + actualReturnType + ", expected: " + methodCriteria.getExpectedReturnType());
 
     }
-    public void checkParameterTypes(Method method) {
+    public void checkParameterTypes(Method method, Report report) {
             List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
             Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
             List<Class<?>> expectedParameterTypes = methodCriteria.getExpectedParameterTypes();
@@ -46,9 +47,9 @@ public class MethodTest extends Test {
     public void executeTest(Class<?> clazz, Report report) {
         try {
             Method method = clazz.getDeclaredMethod(methodName, (Class<?>[]) methodCriteria.getExpectedParameterTypes().toArray());
-            checkAccessModifier(method);
-            checkReturnType(method);
-            checkParameterTypes(method);
+            checkAccessModifier(method, report);
+            checkReturnType(method, report);
+            checkParameterTypes(method, report);
 
         // report.addPassedTest("Method: " + this.methodName + " passed all checks");
         } catch (NoSuchMethodException e) {
