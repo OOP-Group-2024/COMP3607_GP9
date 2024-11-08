@@ -46,7 +46,7 @@ public class MethodTest extends Test {
     @Override
     public void executeTest(Class<?> clazz, Report report) {
         try {
-            Method method = clazz.getDeclaredMethod(methodName, (Class<?>[]) methodCriteria.getExpectedParameterTypes().toArray());
+            Method method = clazz.getDeclaredMethod(methodName, (Class<?>[]) methodCriteria.getExpectedParameterTypes().toArray(new Class<?>[0]));
             checkAccessModifier(method, report);
             checkReturnType(method, report);
             checkParameterTypes(method, report);

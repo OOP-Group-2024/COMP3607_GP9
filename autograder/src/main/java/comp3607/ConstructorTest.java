@@ -2,6 +2,7 @@ package comp3607;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,9 +24,14 @@ public class ConstructorTest extends Test {
     public void checkParameterTypes(Constructor<?> constructor, Report report) {
         List<Class<?>> parameterTypes = Arrays.asList(constructor.getParameterTypes());
         Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        Assertions.assertEquals(expectedParameterTypes, parameterTypes,
+        List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
+        Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+        //Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+        //Assertions.assertEquals(expectedParameterTypes, parameterTypes,
+        // "Constructor has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
+        Assertions.assertEquals(mutableParameterTypes, parameterTypes,
          "Constructor has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
+
     }
 
     public void checkConstructorInvocation(Constructor<?> constructor, Report report, Object... args) {
@@ -41,7 +47,7 @@ public class ConstructorTest extends Test {
     @Override
     protected void executeTest(Class<?> clazz, Report report) {
         try {
-            Constructor<?> constructor = clazz.getDeclaredConstructor((Class<?>[]) expectedParameterTypes.toArray());
+            Constructor<?> constructor = clazz.getDeclaredConstructor(expectedParameterTypes.toArray(new Class<?>[0]) );
             checkParameterTypes(constructor, report);
             checkConstructorInvocation(constructor, report, expectedInputs.toArray());
         } catch (NoSuchMethodException e) {

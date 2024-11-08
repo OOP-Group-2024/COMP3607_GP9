@@ -11,7 +11,6 @@ public class TestExample {
     // Example: Adding a method test for a method with specific criteria
         MethodCriteria methodCriteria = new MethodCriteria( "public", "void", List.of(String.class));
         MethodTest mTest = new MethodTest("MethodName", methodCriteria);
-        System.out.println("Test");
         classTestGroup.addTest(mTest);
 
         // Example: Adding a variable test for a variable with specific criteria
@@ -22,9 +21,10 @@ public class TestExample {
         // Example: Adding a constructor test for a constructor with specific criteria
         ConstructorTest constructorTest = new ConstructorTest(List.of(String.class, int.class), List.of("String", 1));
         classTestGroup.addTest(constructorTest);
-
+        
         // Run all tests in the group
-        classTestGroup.executeTest(ChatBot.class, new Report());
-
+        Report report = new Report();
+        classTestGroup.executeTest(ChatBot.class, report);
+        System.out.println(report.generateReport());
 }
 }

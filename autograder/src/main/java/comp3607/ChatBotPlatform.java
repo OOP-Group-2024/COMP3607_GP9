@@ -1,5 +1,5 @@
 package comp3607;
 
-public class ChatBotPlatform {
+public enum ChatBotPlatform {
     //for testing
 }
