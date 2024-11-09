@@ -12,6 +12,8 @@ public class ChatBotPlatform {
     }
 
     public boolean addChatBot(int num) {
+        ChatBot bot= new ChatBot();
+        bots.add(bot);
         return true;
     }
 

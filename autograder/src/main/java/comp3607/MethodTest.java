@@ -30,9 +30,9 @@ public class MethodTest extends Test {
         String expectedAccessModifier = methodCriteria.getExpectedAccessModifier();
         try{
             Assertions.assertEquals(expectedAccessModifier, actualModifier);
-            report.addPassedTest(String.format("Method: %-25s Correct access modifier", methodName));    
+            report.addPassedTest(String.format("Method: %-30s Correct access modifier", methodName));    
         }catch (AssertionError e){
-            report.addError(String.format("Method: %-25s Incorrect access modifier. Expected - %s, Declared - %s", methodName, expectedAccessModifier, actualModifier));
+            report.addError(String.format("Method: %-30s Incorrect access modifier. Expected - %s, Declared - %s", methodName, expectedAccessModifier, actualModifier));
         }
     }
     public void checkReturnType(Method method, Report report) {
@@ -40,9 +40,9 @@ public class MethodTest extends Test {
         String expectedReturnType = methodCriteria.getExpectedReturnType();
         try{
             Assertions.assertEquals(expectedReturnType, actualReturnType);
-            report.addPassedTest(String.format("Method: %-25s Correct return type", methodName));    
+            report.addPassedTest(String.format("Method: %-30s Correct return type", methodName));    
         }catch (AssertionError e){
-            report.addError(String.format("Method: %-25s Incorrect return type. Expected - %s, Declared - %s", methodName, expectedReturnType, actualReturnType));
+            report.addError(String.format("Method: %-30s Incorrect return type. Expected - %s, Declared - %s", methodName, expectedReturnType, actualReturnType));
         }
     }
 
@@ -54,10 +54,10 @@ public class MethodTest extends Test {
             List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
             Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
             Assertions.assertEquals(mutableParameterTypes, parameterTypes);
-            report.addPassedTest(String.format("Method: %-25s Correct paramter types", methodName));    
+            report.addPassedTest(String.format("Method: %-30s Correct paramter types", methodName));    
 
         }catch(AssertionError e){
-            report.addError(String.format("Method: %-25s Incorrect parameter types. Expected - %s, Declared - %s", methodName, expectedParameterTypes, parameterTypes));
+            report.addError(String.format("Method: %-30s Incorrect parameter types. Expected - %s, Declared - %s", methodName, expectedParameterTypes, parameterTypes));
         }
     }
    

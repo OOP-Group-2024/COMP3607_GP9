@@ -31,10 +31,10 @@ public class ConstructorTest extends Test {
             List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
             Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
             Assertions.assertEquals(mutableParameterTypes, parameterTypes);
-            report.addPassedTest(String.format("Constructor: %-20s Correct paramter types", constructorName));    
+            report.addPassedTest(String.format("Constructor: %-25s Correct paramter types", constructorName));    
 
         }catch (AssertionError e){
-            report.addError(String.format("Constructor: %-20s Incorrect parameter types. Expected - %s, Declared - %s", constructorName, expectedParameterTypes, parameterTypes));
+            report.addError(String.format("Constructor: %-25s Incorrect parameter types. Expected - %s, Declared - %s", constructorName, expectedParameterTypes, parameterTypes));
         }
     }
 
@@ -43,10 +43,10 @@ public class ConstructorTest extends Test {
         try{
             Object instance = constructor.newInstance(args);
             Assertions.assertNotNull(instance);
-            report.addPassedTest(String.format("Constructor: %-20s Successfully created an instance", constructorName));
+            report.addPassedTest(String.format("Constructor: %-25s Successfully created an instance", constructorName));
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException e) {
             //report.addError("Constructor for " + constructorName + " threw exception: " + e.getMessage());
-            report.addError(String.format("Constructor: %-20s threw exception: " + e.getMessage(), constructorName));
+            report.addError(String.format("Constructor: %-25s threw exception: " + e.getMessage(), constructorName));
 
         }
     }
