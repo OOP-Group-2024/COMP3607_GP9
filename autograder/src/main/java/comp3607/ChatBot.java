@@ -8,14 +8,12 @@ public class ChatBot {
     private int messageNumber;
 
     public ChatBot() {
-        this.chatBotName = "ChatGPT-3.5" ; 
+        this.chatBotName = ChatBotGenerator.generateChatBotLLM(6) ; 
     }
 
     //public ChatBot(int messageLimit) {
-    public ChatBot(int messageLimit) {
-
-        this.messageNumber = 0;
-        this.messageLimit = messageLimit;
+    public ChatBot(int num) {
+        this.chatBotName = ChatBotGenerator.generateChatBotLLM(num);
     }
 
     public String getChatBotName() {

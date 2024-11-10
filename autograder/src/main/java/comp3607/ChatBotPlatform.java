@@ -5,17 +5,15 @@ import java.util.ArrayList;
 public class ChatBotPlatform {
 
     // For Testing
-    private ArrayList<Integer> bots;
+    private ArrayList<ChatBot> bots;
     
     public ChatBotPlatform() {
-        
-        bots = new ArrayList<Integer>();
-        bots.add(5);
+        bots = new ArrayList<>();
     }
 
     public boolean addChatBot(int num) {
         ChatBot bot= new ChatBot();
-        //bots.add(bot);
+        bots.add(bot);
         return true;
     }
 

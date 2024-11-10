@@ -36,11 +36,11 @@ public class InstantiationTest extends Test {
                 field.setAccessible(true);
                 actualValue = field.get(instance);
                 Assertions.assertEquals(expectedValue, actualValue);
-                report.addPassedTest(String.format("Constructor : %s ,Passed test. Expected: %s,  returned: %s", constructor.toString(), expectedValue, actualValue));
+                report.addPassedTest(String.format("Constructor: %-25s Passed test. %s: %s", clazz.getSimpleName(), fieldName, actualValue));
             }catch (AssertionError e) {
-                report.addError(String.format("Constructor : %s ,Failed test: Expected %s,  returned: %s", constructor.toString(), expectedValue, actualValue));
+                report.addError(String.format("Constructor: %-25s Failed test: Expected %s,  returned: %s", clazz.getSimpleName(), expectedValue, actualValue));
             }catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException e) {
-                report.addError(String.format("Constructor: %s Failed test: %s", constructor.toString(),e.getMessage()));
+                report.addError(String.format("Constructor: %-25s Failed test: %s", clazz.getSimpleName(),e.getMessage()));
             }
         }
     }
