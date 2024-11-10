@@ -40,6 +40,11 @@
       <artifactId>junit-jupiter-params</artifactId>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <artifactId>junit</artifactId>
+      <groupId>junit</groupId>
+      <version>4.11</version>
+    </dependency>
   </dependencies>
 
   <build>
