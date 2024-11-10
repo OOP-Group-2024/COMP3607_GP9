@@ -18,8 +18,11 @@ public class AssignmentTest {
         addInstantiationTest("bots", List.of(), List.of() , List.of(), chatBotPlatform);
 
         addMethodTest("public", "boolean", List.of(int.class), "addChatBot", chatBotPlatform);
+        addBehaviourTest(List.of("addChatBot", "bots"), List.of(none, List.of(1).toArray()), List.of(), "[ChatBot Name: LLaMa Number Messages Used: 0]", true, chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(), "getChatBotList", chatBotPlatform);
+        addBehaviourTest(List.of("getChatBotList", "bots"), List.of(none, none), List.of(), "[]", "", chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(int.class, String.class), "InteractWithBot", chatBotPlatform);
+        addBehaviourTest(List.of("InteractWithBot","bots"), List.of(none,List.of(1,"Hello").toArray()), List.of(), "[]", "", chatBotPlatform);
         chatBotPlatform.executeTest(ChatBotPlatform.class, report); 
 
         
@@ -36,20 +39,21 @@ public class AssignmentTest {
         addInstantiationTest("chatBotName", List.of(1), "LLaMa", List.of(int.class), chatBot);     
 
         addMethodTest("public", "java.lang.String", List.of(), "getChatBotName", chatBot);
-        addBehaviourTest(List.of("getChatBotName", "chatBotName"), List.of(none, none), List.of(), "ChatGPT-3.5", chatBot);
+        addBehaviourTest(List.of("getChatBotName", "chatBotName"), List.of(none, none), List.of(), "ChatGPT-3.5", "ChatGPT-3.5", chatBot);
         addMethodTest("public", "int", List.of(), "getNumResponsesGenerated", chatBot);
-        addBehaviourTest(List.of("getNumResponsesGenerated", "numResponsesGenerated"), List.of(none, none), List.of(), 0, chatBot);
+        addBehaviourTest(List.of("getNumResponsesGenerated", "numResponsesGenerated"), List.of(none, none), List.of(), 0, 0,chatBot);
         addMethodTest("public", "int", List.of(), "getTotalNumResponsesGenerated", chatBot);
-        addBehaviourTest(List.of("getTotalNumResponsesGenerated","messageNumber"), List.of(none,none), List.of(),0 , chatBot);
+        addBehaviourTest(List.of("getTotalNumResponsesGenerated","messageNumber"), List.of(none,none), List.of(),0 , 0, chatBot);
         addMethodTest("public", "int", List.of(), "getTotalNumResponsesRemaining", chatBot);
-        addBehaviourTest(List.of("getTotalNumResponsesRemaining","messageNumber"), List.of(none,none), List.of(),0 , chatBot);
+        addBehaviourTest(List.of("getTotalNumResponsesRemaining","messageNumber"), List.of(none,none), List.of(),0, 10, chatBot);
         addMethodTest("public", "boolean", List.of(), "limitReached", chatBot);
-        addBehaviourTest(List.of("limitReached","messageNumber"), List.of(none,none), List.of(),0 , chatBot);
+        addBehaviourTest(List.of("limitReached","messageNumber"), List.of(none,none), List.of(), 0, false, chatBot);
         addMethodTest("private", "java.lang.String", List.of(), "generateResponse", chatBot);
-        addBehaviourTest(List.of("generateResponse","numResponsesGenerated"), List.of(none,none), List.of(),1 , chatBot);
+        addBehaviourTest(List.of("generateResponse","numResponsesGenerated"), List.of(none,none), List.of(), 1, "" , chatBot);
         addMethodTest("public", "java.lang.String", List.of(String.class), "prompt", chatBot);
-        addBehaviourTest(List.of("prompt","messageNumber"), List.of(none,List.of("hello").toArray()), List.of(),1 , chatBot);
+        addBehaviourTest(List.of("prompt","messageNumber"), List.of(none,List.of("hello").toArray()), List.of(),1 , "", chatBot);
         addMethodTest("public", "java.lang.String", List.of(), "toString", chatBot);
+
         chatBot.executeTest(ChatBot.class, report);
 
 
@@ -90,10 +94,12 @@ public class AssignmentTest {
 
 
     //Method to add a behavioural test
-    private void addBehaviourTest(List<String> names, List<Object[]> input, List<Class<?>> parameters, Object expectedvalue, TestGroup testGroup){
+    private void addBehaviourTest(List<String> names, List<Object[]> input, List<Class<?>> parameters, Object expectedvalue, Object expectedReturn, TestGroup testGroup){
         Class<?>[] params = parameters.toArray(new Class<?>[0]);
         ValueTest test = new ValueTest(names, input, params, expectedvalue);
         testGroup.addTest(test);
+        ReturnTest test2 = new ReturnTest(names, input, params, expectedReturn);
+        testGroup.addTest(test2);
     }
     
     

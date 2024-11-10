@@ -43,7 +43,7 @@ public class ChatBot {
         }
         this.numResponsesGenerated++;
         this.messageNumber++;
-        return String.format("(Message# %d) Response from %s >> generatedTextHere", messageNumber, chatBotName);
+        return "Message";
     }
 
 
@@ -57,6 +57,6 @@ public class ChatBot {
 
 
     public String toString() {
-        return String.format("ChatBot Name: %s\tNumber Messages Used: %d", chatBotName, numResponsesGenerated);
+        return "ChatBot Name: " + chatBotName + " Number Messages Used: " + messageNumber;
     }
 }

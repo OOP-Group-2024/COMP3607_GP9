@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Assertions;
 
 public class ValueTest extends Test {
 
-    //private final String variableName;
     private final String methodName;
     private final Object[] constructorInput;
     private final Object[] methodInput;
@@ -31,23 +30,21 @@ public class ValueTest extends Test {
 
     public void checkValue(Class<?> clazz, Report report, Constructor<?> constructor, Method method) {
         
-        if(constructor != null) {
-            Object actualValue = null;
-            try{
-                Object instance = constructor.newInstance(constructorInput);
-                method.setAccessible(true);
-                method.invoke(instance, methodInput);
-                Field field = constructor.getDeclaringClass().getDeclaredField(fieldName);
-                field.setAccessible(true);
-                actualValue = field.get(instance);
-                Assertions.assertEquals(actualValue, expectedValue);
-                report.addPassedTest(String.format("Behaviour: %-27s Passed Test. %s: %s", methodName, fieldName, actualValue));
-                 
-            }catch (AssertionError e) {
-                report.addError(String.format("Behaviour: %-27s Failed test: Expected %s,  %s: %s", methodName, expectedValue, fieldName, actualValue));
-            }catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException e) {
-                report.addError(String.format("Behaviour: %-27s Failed test: %s", methodName, e.getMessage()));
-            }
+        Object actualValue = null;
+        try{
+            Object instance = constructor.newInstance(constructorInput);
+            method.setAccessible(true);
+            method.invoke(instance, methodInput);
+            Field field = constructor.getDeclaringClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            actualValue = field.get(instance);
+            Assertions.assertEquals(actualValue.toString(), expectedValue.toString());
+            report.addPassedTest(String.format("Behaviour: %-27s Passed Test. %s: %s", methodName, fieldName, actualValue));
+                
+        }catch (AssertionError e) {
+            report.addError(String.format("Behaviour: %-27s Failed test: Expected %s,  %s: %s", methodName, expectedValue, fieldName, actualValue));
+        }catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException e) {
+            report.addError(String.format("Behaviour: %-27s Failed test: %s", methodName, e.getMessage()));
         }
     }
 
@@ -70,6 +67,7 @@ public class ValueTest extends Test {
         //check for a method
         Method[] methods = clazz.getDeclaredMethods();
         for (Method declaredMethod : methods) {
+            System.out.println(declaredMethod.getName());
             if (declaredMethod.getName().equals(methodName)) {
                 method = declaredMethod;
                 break;
