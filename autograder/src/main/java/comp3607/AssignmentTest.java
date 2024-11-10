@@ -13,6 +13,7 @@ public class AssignmentTest {
         //Defining tests for ChatBotPlatform
         addVariableTest("private", "ArrayList", "bots", chatBotPlatform);
         addConstructorTest(List.of(), List.of(), chatBotPlatform);
+        addInstantionTest("chatBotName", List.of(), "ChatGPT-3.5", List.of(), chatBot);
         addMethodTest("public", "boolean", List.of(int.class), "addChatBot", chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(), "getChatBotList", chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(int.class, String.class), "InteractWithBot", chatBotPlatform);
@@ -61,6 +62,14 @@ public class AssignmentTest {
         testGroup.addTest(test);
     }
 
+    //InstantiationTest testing = new InstantiationTest("chatBotPlatform", List.of().toArray(), "ArrayList<>", params);
+
+    private void addInstantionTest(String fieldName, List<Object> args, Object expectedValue, List<Class<?>> parameters, TestGroup testGroup){
+        Class<?>[] params = parameters.toArray(new Class<?>[0]);
+        InstantiationTest test = new InstantiationTest(fieldName, args.toArray(), expectedValue, params);
+        testGroup.addTest(test);
+    }
+    
 
     public void printReport(){
         System.out.println(report.generateReport());

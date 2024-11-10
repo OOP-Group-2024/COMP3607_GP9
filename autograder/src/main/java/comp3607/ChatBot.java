@@ -8,7 +8,7 @@ public class ChatBot {
     private int messageNumber;
 
     public ChatBot() {
-        this.messageLimit = 10; 
+        this.chatBotName = "ChatGPT-3.5" ; 
     }
 
     //public ChatBot(int messageLimit) {
