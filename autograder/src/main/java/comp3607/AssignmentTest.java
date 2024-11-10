@@ -8,7 +8,7 @@ public class AssignmentTest {
     private Report report = new Report();
 
 
-    public void setUp() {
+    public void setUp(Class<?> chatBotClass, Class<?> chatBotPlatformClass) {
 
         //Defining tests for ChatBotPlatform
         addVariableTest("private", "ArrayList", "bots", chatBotPlatform);
@@ -16,7 +16,7 @@ public class AssignmentTest {
         addMethodTest("public", "boolean", List.of(int.class), "addChatBot", chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(), "getChatBotList", chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(int.class, String.class), "InteractWithBot", chatBotPlatform);
-        chatBotPlatform.executeTest(ChatBotPlatform.class, report); 
+        chatBotPlatform.executeTest(chatBotPlatformClass, report); 
 
         
 
@@ -34,7 +34,7 @@ public class AssignmentTest {
         addMethodTest("public", "boolean", List.of(), "limitReached", chatBot);
         addMethodTest("public", "java.lang.String", List.of(String.class), "prompt", chatBot);
         addMethodTest("public", "java.lang.String", List.of(), "toString", chatBot);
-        chatBot.executeTest(ChatBot.class, report);
+        chatBot.executeTest(chatBotClass, report);
 
     }
 
