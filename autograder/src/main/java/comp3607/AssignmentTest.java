@@ -26,7 +26,7 @@ public class AssignmentTest {
         addVariableTest("private", "int", "messageLimit", chatBot);
         addVariableTest("private", "int", "messageNumber", chatBot);
         addConstructorTest(List.of(), List.of(), chatBot);
-        addConstructorTest(List.of(int.class), List.of(), chatBot);
+        addConstructorTest(List.of(int.class), List.of(1), chatBot);
         addMethodTest("public", "java.lang.String", List.of(), "getChatBotName", chatBot);
         addMethodTest("public", "int", List.of(), "getNumResponsesGenerated", chatBot);
         addMethodTest("public", "int", List.of(), "getTotalNumResponsesGenerated", chatBot);

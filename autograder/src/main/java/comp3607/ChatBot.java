@@ -11,7 +11,9 @@ public class ChatBot {
         this.messageLimit = 10; 
     }
 
+    //public ChatBot(int messageLimit) {
     public ChatBot(int messageLimit) {
+
         this.messageNumber = 0;
         this.messageLimit = messageLimit;
     }
