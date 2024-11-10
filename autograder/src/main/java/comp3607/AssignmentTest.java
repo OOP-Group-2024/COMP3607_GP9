@@ -5,6 +5,7 @@ import java.util.List;
 public class AssignmentTest {
     private TestGroup chatBotPlatform = new TestGroup();
     private TestGroup chatBot = new TestGroup();
+    private TestGroup chatBotGenerator = new TestGroup();
     private Report report = new Report();
 
 
@@ -13,7 +14,7 @@ public class AssignmentTest {
         //Defining tests for ChatBotPlatform
         addVariableTest("private", "ArrayList", "bots", chatBotPlatform);
         addConstructorTest(List.of(), List.of(), chatBotPlatform);
-        addInstantionTest("bots", List.of(), List.of() , List.of(), chatBotPlatform);
+        addInstantiationTest("bots", List.of(), List.of() , List.of(), chatBotPlatform);
         addMethodTest("public", "boolean", List.of(int.class), "addChatBot", chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(), "getChatBotList", chatBotPlatform);
         addMethodTest("public", "java.lang.String", List.of(int.class, String.class), "InteractWithBot", chatBotPlatform);
@@ -27,9 +28,9 @@ public class AssignmentTest {
         addVariableTest("private", "int", "messageLimit", chatBot);
         addVariableTest("private", "int", "messageNumber", chatBot);
         addConstructorTest(List.of(), List.of(), chatBot);
-        addInstantionTest("chatBotName", List.of(), "ChatGPT-3.5", List.of(), chatBot);
+        addInstantiationTest("chatBotName", List.of(), "ChatGPT-3.5", List.of(), chatBot);
         addConstructorTest(List.of(int.class), List.of(1), chatBot);
-        addInstantionTest("chatBotName", List.of(1), "LLaMa", List.of(int.class), chatBot);
+        addInstantiationTest("chatBotName", List.of(1), "LLaMa", List.of(int.class), chatBot);
         addMethodTest("public", "java.lang.String", List.of(), "getChatBotName", chatBot);
         addMethodTest("public", "int", List.of(), "getNumResponsesGenerated", chatBot);
         addMethodTest("public", "int", List.of(), "getTotalNumResponsesGenerated", chatBot);
@@ -39,6 +40,10 @@ public class AssignmentTest {
         addMethodTest("public", "java.lang.String", List.of(), "toString", chatBot);
         chatBot.executeTest(ChatBot.class, report);
 
+
+        //Defining tests for ChatBotGenerator
+        addMethodTest("public static", "java.lang.String", List.of(int.class), "generateChatBotLLM", chatBotGenerator);
+        chatBotGenerator.executeTest(ChatBotGenerator.class, report);
     }
 
 
@@ -66,7 +71,7 @@ public class AssignmentTest {
 
     //InstantiationTest testing = new InstantiationTest("chatBotPlatform", List.of().toArray(), "ArrayList<>", params);
 
-    private void addInstantionTest(String fieldName, List<Object> args, Object expectedValue, List<Class<?>> parameters, TestGroup testGroup){
+    private void addInstantiationTest(String fieldName, List<Object> args, Object expectedValue, List<Class<?>> parameters, TestGroup testGroup){
         Class<?>[] params = parameters.toArray(new Class<?>[0]);
         InstantiationTest test = new InstantiationTest(fieldName, args.toArray(), expectedValue, params);
         testGroup.addTest(test);
