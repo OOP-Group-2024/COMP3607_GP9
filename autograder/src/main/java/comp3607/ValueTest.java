@@ -35,6 +35,7 @@ public class ValueTest extends Test {
             Object actualValue = null;
             try{
                 Object instance = constructor.newInstance(constructorInput);
+                method.setAccessible(true);
                 method.invoke(instance, methodInput);
                 Field field = constructor.getDeclaringClass().getDeclaredField(fieldName);
                 field.setAccessible(true);
@@ -43,7 +44,7 @@ public class ValueTest extends Test {
                 report.addPassedTest(String.format("Behaviour: %-27s Passed Test. %s: %s", methodName, fieldName, actualValue));
                  
             }catch (AssertionError e) {
-                report.addError(String.format("Behaviour: %-27s Failed test: Expected %s,  returned: %s", methodName, expectedValue, actualValue));
+                report.addError(String.format("Behaviour: %-27s Failed test: Expected %s,  %s: %s", methodName, expectedValue, fieldName, actualValue));
             }catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException e) {
                 report.addError(String.format("Behaviour: %-27s Failed test: %s", methodName, e.getMessage()));
             }

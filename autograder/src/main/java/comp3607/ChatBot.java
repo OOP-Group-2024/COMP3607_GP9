@@ -4,11 +4,13 @@ public class ChatBot {
 
     private String chatBotName;
     private int numResponsesGenerated;
-    private int messageLimit = 10;
+    private final int messageLimit = 10;
     private int messageNumber = 0;
 
     public ChatBot() {
-        this.chatBotName = ChatBotGenerator.generateChatBotLLM(0);  // Default to ChatGPT-3.5
+        this.chatBotName = ChatBotGenerator.generateChatBotLLM(0);
+        this.numResponsesGenerated = 0;
+        this.messageNumber = 0;
     }
 
     public ChatBot(int LLMCode) {
