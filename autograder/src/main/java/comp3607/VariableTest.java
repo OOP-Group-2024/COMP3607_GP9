@@ -14,28 +14,43 @@ public class VariableTest extends Test {
         this.variableCriteria = variableCriteria;
     }
 
+
+    //Catch assertion errors if check fails and add results to report
+
     public void checkAccessModifier(Field field, Report report) {
         String actualModifier = Modifier.toString(field.getModifiers());
-        Assertions.assertEquals(variableCriteria.getExpectedAccessModifier(), actualModifier,
-                "Variable has incorrect access modifier: " + actualModifier + ", expected: " + variableCriteria.getExpectedAccessModifier());
+        String expectedAccessModifier = variableCriteria.getExpectedAccessModifier();
+        try{
+            Assertions.assertEquals(expectedAccessModifier, actualModifier);
+            report.addPassedTest(String.format("Variable: %-28s Correct access Modifier", variableName));    
+        } catch (AssertionError e) {
+            report.addError(String.format("Variable: %-28s Incorrect access modifer. Expected - %s, Declared - %s", variableName ,expectedAccessModifier, actualModifier));
+        }
     }
 
     public void checkType(Field field, Report report) {
         String actualType = field.getType().getSimpleName();
-        Assertions.assertEquals(variableCriteria.getExpectedType(), actualType,
-                "Variable has incorrect type: " + actualType + ", expected: " + variableCriteria.getExpectedType());    
-        
-    }
-    @Override
-    public void executeTest(Class<?> clazz, Report report) {
-        try {
-            Field field = clazz.getDeclaredField(variableName);
-            checkAccessModifier(field, report);
-            checkType(field, report);
-        } catch (NoSuchFieldException e) {
-            report.addError("Variable: " + this.variableName + " Does not exist");
+        String expectedType = variableCriteria.getExpectedType();
+        try{
+            Assertions.assertEquals(expectedType, actualType);
+            report.addPassedTest(String.format("Variable: %-28s Correct type", variableName));    
+        } catch (AssertionError e) {
+            //report.addError("Variable: " + variableName + "\tIncorrect type. Expected - " + variableCriteria.getExpectedType() + ",   Declared - " + actualType);
+            report.addError(String.format("Variable: %-28s Incorrect type. Expected - %s, Declared - %s", variableName, expectedType, actualType));
         }
     }
-  
-    
+
+    //Once field exists, proceed with checks, if not then return 
+    @Override
+    public void executeTest(Class<?> clazz, Report report) {
+        Field field;
+        try {
+            field = clazz.getDeclaredField(variableName);
+        } catch (NoSuchFieldException e) {
+            report.addError("Variable: " + variableName + " does not exist.");
+            return;
+        }
+        checkAccessModifier(field, report);
+        checkType(field, report);
+    }
 }

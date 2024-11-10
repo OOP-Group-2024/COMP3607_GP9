@@ -3,6 +3,7 @@ package comp3607;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,42 +21,68 @@ public class MethodTest extends Test {
         this.methodName = methodName;
     }
 
+
+    //Catch assertion errors if check fails and add results to report
+
     public void checkAccessModifier(Method method, Report report) {
         
         String actualModifier = Modifier.toString(method.getModifiers());
-        Assertions.assertEquals(methodCriteria.getExpectedAccessModifier(), actualModifier, 
-            "Method has incorrect access modifier: " + actualModifier + ", expected: " + methodCriteria.getExpectedAccessModifier());
-
+        String expectedAccessModifier = methodCriteria.getExpectedAccessModifier();
+        try{
+            Assertions.assertEquals(expectedAccessModifier, actualModifier);
+            report.addPassedTest(String.format("Method: %-30s Correct access modifier", methodName));    
+        }catch (AssertionError e){
+            report.addError(String.format("Method: %-30s Incorrect access modifier. Expected - %s, Declared - %s", methodName, expectedAccessModifier, actualModifier));
+        }
     }
     public void checkReturnType(Method method, Report report) {
         String actualReturnType = method.getReturnType().getName();
-        Assertions.assertEquals(methodCriteria.getExpectedReturnType(), actualReturnType, 
-            "Method has incorrect return type: " + actualReturnType + ", expected: " + methodCriteria.getExpectedReturnType());
-
+        String expectedReturnType = methodCriteria.getExpectedReturnType();
+        try{
+            Assertions.assertEquals(expectedReturnType, actualReturnType);
+            report.addPassedTest(String.format("Method: %-30s Correct return type", methodName));    
+        }catch (AssertionError e){
+            report.addError(String.format("Method: %-30s Incorrect return type. Expected - %s, Declared - %s", methodName, expectedReturnType, actualReturnType));
+        }
     }
+
     public void checkParameterTypes(Method method, Report report) {
-            List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
+        List<Class<?>> expectedParameterTypes = methodCriteria.getExpectedParameterTypes();
+        List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
+        try{
             Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-            List<Class<?>> expectedParameterTypes = methodCriteria.getExpectedParameterTypes();
-            Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-            Assertions.assertEquals(expectedParameterTypes, parameterTypes, 
-                "Method has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
-           
+            List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
+            Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+            Assertions.assertEquals(mutableParameterTypes, parameterTypes);
+            report.addPassedTest(String.format("Method: %-30s Correct paramter types", methodName));    
+
+        }catch(AssertionError e){
+            report.addError(String.format("Method: %-30s Incorrect parameter types. Expected - %s, Declared - %s", methodName, expectedParameterTypes, parameterTypes));
+        }
     }
    
+    //Ignore params and search through declared method names to match the appropriate expected method name 
+    //before conducting checks
+
     @Override
     public void executeTest(Class<?> clazz, Report report) {
-        try {
-            Method method = clazz.getDeclaredMethod(methodName, (Class<?>[]) methodCriteria.getExpectedParameterTypes().toArray());
-            checkAccessModifier(method, report);
-            checkReturnType(method, report);
-            checkParameterTypes(method, report);
+        Method method = null;
+        
+        Method[] methods = clazz.getDeclaredMethods();
 
-        // report.addPassedTest("Method: " + this.methodName + " passed all checks");
-        } catch (NoSuchMethodException e) {
-            report.addError("Method: " + this.methodName + " Does not exist");
+        for (Method declaredMethod : methods) {
+            if (declaredMethod.getName().equals(methodName)) {
+                method = declaredMethod;
+                break;
+            }
         }
-    
+        if (method == null) {
+            report.addError("Method: " + this.methodName + " Does not exist");
+            return;
+        }
+        
+        checkAccessModifier(method, report);
+        checkReturnType(method, report);
+        checkParameterTypes(method, report);
     }
-
 }

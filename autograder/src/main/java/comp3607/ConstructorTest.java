@@ -2,6 +2,7 @@ package comp3607;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,42 +12,82 @@ import org.junit.jupiter.api.Assertions;
 public class ConstructorTest extends Test {
     private final List<Class<?>> expectedParameterTypes;
     private final List<Object> expectedInputs;
+    private String constructorName;
 
 
-
-    public ConstructorTest(List<Class<?>> parameterTypes, List<Object> inputs) {    
+    public ConstructorTest(List<Class<?>> parameterTypes, List<Object> inputs) {  
         this.expectedParameterTypes = parameterTypes;
         this.expectedInputs = inputs;  
  
     }
 
+
+    //Catch assertion errors if check fails and add results to report
+
     public void checkParameterTypes(Constructor<?> constructor, Report report) {
         List<Class<?>> parameterTypes = Arrays.asList(constructor.getParameterTypes());
-        Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        Collections.sort(expectedParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        Assertions.assertEquals(expectedParameterTypes, parameterTypes,
-         "Constructor has incorrect parameter types: " + parameterTypes + ", expected: " + expectedParameterTypes);
+        try{
+            Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+            List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
+            Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+            Assertions.assertEquals(mutableParameterTypes, parameterTypes);
+            report.addPassedTest(String.format("Constructor: %-25s Correct paramter types", constructorName));    
+
+        }catch (AssertionError e){
+            report.addError(String.format("Constructor: %-25s Incorrect parameter types. Expected - %s, Declared - %s", constructorName, expectedParameterTypes, parameterTypes));
+        }
     }
 
     public void checkConstructorInvocation(Constructor<?> constructor, Report report, Object... args) {
 
         try{
             Object instance = constructor.newInstance(args);
+            //Object instance = constructor.newInstance(int.class);
             Assertions.assertNotNull(instance);
-     
+            report.addPassedTest(String.format("Constructor: %-25s Successfully created an instance", constructorName));
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException e) {
-            report.addError("Constructor threw exception: " + e.getMessage());
+            //report.addError("Constructor for " + constructorName + " threw exception: " + e.getMessage());
+            report.addError(String.format("Constructor: %-25s threw exception: " + e.getMessage() + ", when instatiated", constructorName));
+
         }
     }
+
+
+    //First check for constructor with correct params(1), if not found look for a one with the same name(2)
+    //Conduct tests on either (1) or (2)
+
     @Override
     protected void executeTest(Class<?> clazz, Report report) {
-        try {
-            Constructor<?> constructor = clazz.getDeclaredConstructor((Class<?>[]) expectedParameterTypes.toArray());
-            checkParameterTypes(constructor, report);
-            checkConstructorInvocation(constructor, report, expectedInputs.toArray());
-        } catch (NoSuchMethodException e) {
-            report.addError("Constructor does not exist");
+        
+        Constructor<?> correctConstructor = null;
+        Constructor<?> defaultConstructor = null;
+        constructorName = clazz.getSimpleName();
+       
+        try{
+            correctConstructor = clazz.getDeclaredConstructor(expectedParameterTypes.toArray(new Class<?>[0]));
+        }catch(NoSuchMethodException e){
+            correctConstructor = null;
+        }
+
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+        for(Constructor<?> declaredConstructor : constructors){
+            if(declaredConstructor.getName().equals(clazz.getName())){
+                defaultConstructor = declaredConstructor;
+                break;
+            }
+        }
+
+        if (defaultConstructor == null && correctConstructor == null){
+            report.addError("Constructor does not exist ");
+            return;
+        }
+        if(correctConstructor == null){
+            checkParameterTypes(defaultConstructor, report); 
+            checkConstructorInvocation(defaultConstructor, report, expectedInputs.toArray());
+        }
+        else{
+            checkParameterTypes(correctConstructor, report); 
+            checkConstructorInvocation(correctConstructor, report, expectedInputs.toArray());
         }
     }
-    
 }
