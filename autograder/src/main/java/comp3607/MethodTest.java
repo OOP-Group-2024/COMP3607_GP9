@@ -77,7 +77,7 @@ public class MethodTest extends Test {
             }
         }
         if (method == null) {
-            report.addError("Method: " + this.methodName + " Does not exist");
+            report.addError(String.format("Method: %-30s Does not exist", methodName));
             return;
         }
         

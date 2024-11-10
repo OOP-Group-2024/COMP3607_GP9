@@ -1,34 +1,52 @@
 package comp3607;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 
 public class ValueTest extends Test {
 
-    private final String variableName;
+    //private final String variableName;
+    private final String methodName;
+    private final Object[] constructorInput;
+    private final Object[] methodInput;
     private final Object expectedValue;
-    private final Object instance;
-    private final Field field;
+    private final Class<?>[] parameterTypes;
+    private final String fieldName;
     
-    public ValueTest(String variableName, Object expectedValue, Object instance, Field field) {
-        this.variableName = variableName;
+    public ValueTest(List<String> names, List<Object[]> input, Class<?>[] parameterTypes, Object expectedValue) {
+
+        this.methodName = names.get(0);
+        this.fieldName = names.get(1);
+        this.constructorInput = input.get(0);
+        this.methodInput = input.get(1);
         this.expectedValue = expectedValue;
-        this.instance = instance;
-        this.field = field;
+        this.parameterTypes = parameterTypes;
     }
 
-    public void checkValue(Report report) {
-        Object actualValue = null;
-        try{
-            field.setAccessible(true);
-            actualValue = field.get(instance);
-            Assertions.assertEquals(expectedValue, actualValue);
-            report.addPassedTest(String.format("Variable : %s ,Passed test. Expected: %s,  returned: %s", variableName, expectedValue, actualValue));
-        }catch (AssertionError e) {
-            report.addError(String.format("Variable : %s ,Failed test: Expected %s,  returned: %s", variableName, expectedValue, actualValue));
-        }catch (IllegalAccessException e) {
-            report.addError(String.format("Variable: %s Failed test: %s", variableName,e.getMessage()));
+
+    public void checkValue(Class<?> clazz, Report report, Constructor<?> constructor, Method method) {
+        
+        if(constructor != null) {
+            Object actualValue = null;
+            try{
+                Object instance = constructor.newInstance(constructorInput);
+                method.invoke(instance, methodInput);
+                Field field = constructor.getDeclaringClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+                actualValue = field.get(instance);
+                Assertions.assertEquals(actualValue, expectedValue);
+                report.addPassedTest(String.format("Behaviour: %-27s Passed Test. %s: %s", methodName, fieldName, actualValue));
+                 
+            }catch (AssertionError e) {
+                report.addError(String.format("Behaviour: %-27s Failed test: Expected %s,  returned: %s", methodName, expectedValue, actualValue));
+            }catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException e) {
+                report.addError(String.format("Behaviour: %-27s Failed test: %s", methodName, e.getMessage()));
+            }
         }
     }
 
@@ -36,7 +54,32 @@ public class ValueTest extends Test {
 
     @Override
     protected void executeTest(Class<?> clazz, Report report) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        Method method = null;
+        Constructor<?> constructor = null;
+
+        //Check for a constructor
+        try {
+            constructor = clazz.getDeclaredConstructor(parameterTypes);
+        } catch (NoSuchMethodException | SecurityException e) {
+            report.addError(String.format("Behaviour: %-27s Constructor does not exist", methodName));
+            return;
+        }  
+
+        //check for a method
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method declaredMethod : methods) {
+            if (declaredMethod.getName().equals(methodName)) {
+                method = declaredMethod;
+                break;
+            }
+        }
+        if (method == null) {
+            report.addError(String.format("Behaviour: %-27s Does not exist", methodName));
+            return;
+        }
+
+        checkValue(clazz, report, constructor, method);
     }
     
 }

@@ -47,7 +47,7 @@ public class ConstructorTest extends Test {
             report.addPassedTest(String.format("Constructor: %-25s Successfully created an instance", constructorName));
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException e) {
             //report.addError("Constructor for " + constructorName + " threw exception: " + e.getMessage());
-            report.addError(String.format("Constructor: %-25s threw exception: " + e.getMessage() + ", when instatiated", constructorName));
+            report.addError(String.format("Constructor: %-25s threw exception: " + e.getMessage() + ", when instantiated", constructorName));
 
         }
     }
@@ -78,7 +78,7 @@ public class ConstructorTest extends Test {
         }
 
         if (defaultConstructor == null && correctConstructor == null){
-            report.addError("Constructor does not exist ");
+            report.addError(String.format("Constructor: %-25s Does not exist", clazz.getSimpleName()));
             return;
         }
         if(correctConstructor == null){

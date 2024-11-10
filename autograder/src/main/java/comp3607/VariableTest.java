@@ -47,7 +47,7 @@ public class VariableTest extends Test {
         try {
             field = clazz.getDeclaredField(variableName);
         } catch (NoSuchFieldException e) {
-            report.addError("Variable: " + variableName + " does not exist.");
+            report.addError(String.format("Variable: %-28s Does not exist", variableName));
             return;
         }
         checkAccessModifier(field, report);

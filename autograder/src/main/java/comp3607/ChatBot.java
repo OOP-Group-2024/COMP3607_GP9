@@ -4,16 +4,15 @@ public class ChatBot {
 
     private String chatBotName;
     private int numResponsesGenerated;
-    private int messageLimit;
-    private int messageNumber;
+    private int messageLimit = 10;
+    private int messageNumber = 0;
 
     public ChatBot() {
-        this.chatBotName = ChatBotGenerator.generateChatBotLLM(6) ; 
+        this.chatBotName = ChatBotGenerator.generateChatBotLLM(0);  // Default to ChatGPT-3.5
     }
 
-    //public ChatBot(int messageLimit) {
-    public ChatBot(int num) {
-        this.chatBotName = ChatBotGenerator.generateChatBotLLM(num);
+    public ChatBot(int LLMCode) {
+        this.chatBotName = ChatBotGenerator.generateChatBotLLM(LLMCode);
     }
 
     public String getChatBotName() {
@@ -25,23 +24,37 @@ public class ChatBot {
     }
 
     public int getTotalNumResponsesGenerated() {
-        numResponsesGenerated = numResponsesGenerated - messageNumber;
-        return numResponsesGenerated;
+        return messageNumber;
     }
 
     public int getTotalNumResponsesRemaining() {
-        return messageLimit - numResponsesGenerated;
+        return messageLimit - messageNumber;
     }
 
     public boolean limitReached() {
-        return numResponsesGenerated >= messageLimit;
+        return messageNumber >= messageLimit;
     }
 
-    public String prompt(String userInput) {
-        return "Response to: " + userInput;
+    private String generateResponse() {
+        if (limitReached()) {
+            return "Daily Limit Reached. Wait 24 hours to resume chatbot usage.";
+        }
+        this.numResponsesGenerated++;
+        this.messageNumber++;
+        return String.format("(Message# %d) Response from %s >> generatedTextHere", messageNumber, chatBotName);
     }
+
+
+    public String prompt(String requestMessage) {
+        if (this.limitReached()) {
+            return "Daily Limit Reached. Wait 24 hours to resume chatbot usage";
+        }
+
+        return generateResponse();
+    }
+
 
     public String toString() {
-        return "ChatBot: " + chatBotName;
+        return String.format("ChatBot Name: %s\tNumber Messages Used: %d", chatBotName, numResponsesGenerated);
     }
 }
