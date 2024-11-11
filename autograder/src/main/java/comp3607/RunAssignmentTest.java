@@ -16,36 +16,62 @@ public class RunAssignmentTest {
             try {
                 String zipFilePath = ZipHandler.getZipFileFromInputFolder();
                 System.out.println("Zip file found at: " + zipFilePath);
-    
-                // Create a temp directory to unzip the contents
-                String tempDirPath = Files.createTempDirectory("unzipped_").toString();
-                System.out.println("Unzipping to: " + tempDirPath);
-    
-                // Unzip the zip file into the temporary directory
+
+                String tempDirPath = Files.createTempDirectory("unzipped_main_").toString();
+                System.out.println("Unzipping main zip to: " + tempDirPath);
+                System.out.println("");
+
+        
                 ZipHandler.unzipFile(zipFilePath, tempDirPath);
-                tempDirectory = tempDirPath;
-            File tempDir = new File(tempDirPath);
+                File mainUnzipDir = new File(tempDirPath);
 
-            for (File projectDir : tempDir.listFiles(File::isDirectory)) {
-                File chatbotFile = new File(projectDir, "ChatBot.java");
-                File chatbotPlatformFile = new File(projectDir, "ChatBotPlatform.java");
-
-                if (chatbotFile.exists() && chatbotPlatformFile.exists()) {
-
-                    ClassCompiler.compileJavaFiles(chatbotFile, chatbotPlatformFile);
-
-
-                    Class<?> chatbotClass = ClassLoader.loadClass(projectDir, "ChatBot");
-                    Class<?> chatbotPlatformClass = ClassLoader.loadClass(projectDir, "ChatBotPlatform");
-
-
-                    if (chatbotClass != null && chatbotPlatformClass != null) {
-                        test.setUp(chatbotClass, chatbotPlatformClass);
-                        test.printReport();
-                    }
-                } else {
-                    System.out.println("Required files not found in " + projectDir.getName());
+                System.out.println("Contents of mainUnzipDir:");
+                for (File file : mainUnzipDir.listFiles()) {
+                    System.out.println(file.getName() + (file.isDirectory() ? " (directory)" : " (file)"));
                 }
+                System.out.println("");
+
+                for (File innerZipFile : mainUnzipDir.listFiles((dir, name) -> name.endsWith(".zip"))) {
+               
+                    System.out.println("Processing inner zip file: " + innerZipFile.getName());
+
+                    File innerUnzipDir = new File(mainUnzipDir, innerZipFile.getName().replace(".zip", ""));
+                    innerUnzipDir.mkdirs();
+    
+                    ZipHandler.unzipFile(innerZipFile.getAbsolutePath(), innerUnzipDir.getAbsolutePath());
+                    System.out.println("Unzipping inner zip to: " + innerUnzipDir);
+
+                    System.out.println("Contents of innerUnzipDir:");
+                    for (File file : innerUnzipDir.listFiles()) {
+                        System.out.println("    "+file.getName() + (file.isDirectory() ? " (directory)" : " (file)"));
+                    }
+                    System.out.println("");
+    
+                    //for (File projectDir : innerUnzipDir.listFiles(File::isDirectory)) {
+                        System.out.println("Processing files");
+
+                        File chatbotFile = new File(innerUnzipDir, "ChatBot.java");
+                        File chatbotPlatformFile = new File(innerUnzipDir, "ChatBotPlatform.java");
+
+                        if (chatbotFile.exists() && chatbotPlatformFile.exists()) {
+                            // Compile the Java files
+                            ClassCompiler.compileJavaFiles(chatbotFile, chatbotPlatformFile);
+
+                            // Load the compiled classes
+                            Class<?> chatbotClass = ClassLoader.loadClass(innerUnzipDir, "ChatBot");
+                            Class<?> chatbotPlatformClass = ClassLoader.loadClass(innerUnzipDir, "ChatBotPlatform");
+
+                            if (chatbotClass != null && chatbotPlatformClass != null) {
+                                // Set up and execute the test
+                                test.setUp(chatbotClass, chatbotPlatformClass);
+                                test.printReport();
+                            }
+
+                        } else {
+                            System.out.println("Required files not found in " + innerUnzipDir.getName());
+                        }
+                    //}
+                System.out.println("");
             }
 
         } catch (URISyntaxException e) {//for debugging
