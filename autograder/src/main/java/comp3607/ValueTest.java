@@ -67,7 +67,6 @@ public class ValueTest extends Test {
         //check for a method
         Method[] methods = clazz.getDeclaredMethods();
         for (Method declaredMethod : methods) {
-            System.out.println(declaredMethod.getName());
             if (declaredMethod.getName().equals(methodName)) {
                 method = declaredMethod;
                 break;
