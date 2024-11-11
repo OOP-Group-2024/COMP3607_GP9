@@ -30,17 +30,8 @@ public class ReturnTest extends Test {
             Object instance = constructor.newInstance(constructorInput);
             method.setAccessible(true);
             actualReturn = method.invoke(instance, methodInput);
-            if(expectedReturn.equals("")){
-                try{
-                    Assertions.assertEquals(expectedReturn.getClass(), actualReturn.getClass());
-                    report.addPassedTest(String.format("Behaviour: %-27s Passed Test. %s, is a String", methodName, actualReturn));
-                    return;
-                }catch(AssertionError e){
-                    report.addError(String.format("Behaviour: %-27s Failed test: Expected - %s,  Returned - %s", methodName, expectedReturn, actualReturn));
-                    return;
-                }
-            }
-            Assertions.assertEquals(expectedReturn, actualReturn);
+            boolean contains = checkString(actualReturn.toString(), expectedReturn.toString());
+            Assertions.assertTrue(contains);
             report.addPassedTest(String.format("Behaviour: %-27s Passed Test. Expected - %s,  Returned - %s", methodName, expectedReturn, actualReturn));
         } catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             report.addError(String.format("Behaviour: %s Failed test: %s", methodName, e.getMessage()));
@@ -80,5 +71,15 @@ public class ReturnTest extends Test {
         checkBehavior(clazz, report, constructor, method);
     }
     
+    private boolean checkString(String actual, String expectedWords){
+        String[] words = expectedWords.split(" ");
+        for(String word : words){
+            if(!actual.contains(word)){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 

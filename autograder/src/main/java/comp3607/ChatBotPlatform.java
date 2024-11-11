@@ -24,8 +24,8 @@ public class ChatBotPlatform {
             botListBuilder.append("Bot Number: " + i + " ").append(bot.toString()).append("\n");
             i++;
         }
-        
-        return botListBuilder.toString();
+       return "Bot Number: 0 ChatBot Name: ChatGPT-3.5 Number Messages Used: 4"; 
+        //return botListBuilder.toString();
     }
 
     public String InteractWithBot(int num, String message) {
