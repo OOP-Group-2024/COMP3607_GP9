@@ -4,7 +4,6 @@ import java.util.List;
 
 public class ChatBotGeneratorTest extends FileTest{
     private TestGroup chatBotGenerator;
-    private Report report;
     
 
     public ChatBotGeneratorTest(){

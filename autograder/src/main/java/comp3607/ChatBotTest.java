@@ -5,7 +5,6 @@ import java.util.List;
 public class ChatBotTest extends FileTest{
 
     private TestGroup chatBot;
-    private Report report;
     protected final Object[] none = List.of().toArray();
 
 
