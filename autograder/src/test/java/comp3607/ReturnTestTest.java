@@ -1,9 +1,9 @@
 package comp3607;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Method;
+import org.junit.jupiter.api.Test;
+
 
 public class ReturnTestTest {
 

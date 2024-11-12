@@ -1,34 +1,5 @@
 package comp3607;
 
-/*import org.junit.jupiter.api.Test;
-import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class ConstructorTestUnit {
-
-    @Test
-    public void testConstructorWithValidParameters() {
-        ConstructorTest constructorTest = new ConstructorTest(MyClass.class, List.of(String.class, int.class));
-        constructorTest.checkConstructorParameters();
-    }
-
-    @Test
-    public void testConstructorWithInvalidParameters() {
-        ConstructorTest constructorTest = new ConstructorTest(MyClass.class, List.of(String.class, double.class));
-        assertThrows(AssertionError.class, constructorTest::checkConstructorParameters,
-            "Expected constructor parameters mismatch to throw AssertionError");
-    }
-
-    @Test
-    public void testConstructorWithNoParameters() {
-        ConstructorTest constructorTest = new ConstructorTest(MyClass.class, List.of());
-        constructorTest.checkConstructorParameters();
-    }
-}*/
-//import comp3607.ConstructorTest;
-//import comp3607.Report;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -36,6 +7,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ConstructorTestUnit {
 
