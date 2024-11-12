@@ -52,6 +52,10 @@ public abstract class FileTest {
         testGroup.addTest(test2);
     }
     
+    protected void addSimulator(TestGroup testGroup){
+        Simulator sim = new Simulator();
+        testGroup.addTest(sim);
+    }
     
     //Print the report
     public void printReport(){

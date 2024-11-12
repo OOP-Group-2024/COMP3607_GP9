@@ -4,9 +4,9 @@ package comp3607;
 import java.util.Random;
 public class ChatBotSimulation
 {
-   private Random Rand = new Random();
-    public ChatBotSimulation()
+    public static void main(String[] args)
     {
+        Random Rand = new Random();
         System.out.println("Hello World!");
         ChatBotPlatform Platform = new ChatBotPlatform();
         for(int i = 0; i < 7; i++){

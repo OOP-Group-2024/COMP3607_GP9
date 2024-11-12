@@ -5,7 +5,7 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Testing:\n");
 
-            FileTest[] tests = { new ChatBotTest(), new ChatBotPlatformTest(), new ChatBotGeneratorTest()};
+            FileTest[] tests = { new ChatBotTest(), new ChatBotPlatformTest(), new ChatBotGeneratorTest(), new SimulationTest()};
             FileContext context = new FileContext();
             Report report = new Report();
             for (FileTest test : tests){
