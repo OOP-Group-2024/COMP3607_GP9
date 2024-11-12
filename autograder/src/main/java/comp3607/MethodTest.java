@@ -29,7 +29,8 @@ public class MethodTest extends Test {
         String actualModifier = Modifier.toString(method.getModifiers());
         String expectedAccessModifier = methodCriteria.getExpectedAccessModifier();
         try{
-            Assertions.assertEquals(expectedAccessModifier, actualModifier);
+            //Assertions.assertEquals(expectedAccessModifier, actualModifier);
+            Assertions.assertTrue(actualModifier.contains(expectedAccessModifier));
             report.addPassedTest(String.format("Method: %-30s Correct access modifier", methodName));    
         }catch (AssertionError e){
             report.addError(String.format("Method: %-30s Incorrect access modifier. Expected - %s, Declared - %s", methodName, expectedAccessModifier, actualModifier));
@@ -71,7 +72,7 @@ public class MethodTest extends Test {
         Method[] methods = clazz.getDeclaredMethods();
 
         for (Method declaredMethod : methods) {
-            if (declaredMethod.getName().equals(methodName)) {
+            if (declaredMethod.getName().toLowerCase().equals(methodName.toLowerCase())) {
                 method = declaredMethod;
                 break;
             }

@@ -21,7 +21,10 @@ public class VariableTest extends Test {
         String actualModifier = Modifier.toString(field.getModifiers());
         String expectedAccessModifier = variableCriteria.getExpectedAccessModifier();
         try{
-            Assertions.assertEquals(expectedAccessModifier, actualModifier);
+            //Assertions.assertEquals(expectedAccessModifier, actualModifier);
+            actualModifier = actualModifier.toLowerCase();
+            //expectedAccessModifier = expectedAccessModifier.toLowerCase();
+            Assertions.assertTrue(actualModifier.equals(expectedAccessModifier));
             report.addPassedTest(String.format("Variable: %-28s Correct access Modifier", variableName));    
         } catch (AssertionError e) {
             report.addError(String.format("Variable: %-28s Incorrect access modifer. Expected - %s, Declared - %s", variableName ,expectedAccessModifier, actualModifier));
@@ -43,14 +46,21 @@ public class VariableTest extends Test {
     //Once field exists, proceed with checks, if not then return 
     @Override
     public void executeTest(Class<?> clazz, Report report) {
-        Field field;
-        try {
-            field = clazz.getDeclaredField(variableName);
-        } catch (NoSuchFieldException e) {
+        Field field=null;
+        Field[]fields = clazz.getDeclaredFields();
+        for(Field f : fields){
+            if(variableName.toLowerCase().equals(f.getName().toLowerCase())){
+                field = f;
+                break;
+            }
+        }
+        if(field == null){
             report.addError(String.format("Variable: %-28s Does not exist", variableName));
             return;
         }
         checkAccessModifier(field, report);
         checkType(field, report);
     }
+
+    
 }

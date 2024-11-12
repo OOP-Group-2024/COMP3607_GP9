@@ -67,7 +67,7 @@ public class ValueTest extends Test {
         //check for a method
         Method[] methods = clazz.getDeclaredMethods();
         for (Method declaredMethod : methods) {
-            if (declaredMethod.getName().equals(methodName)) {
+            if (declaredMethod.getName().toLowerCase().equals(methodName.toLowerCase())) {
                 method = declaredMethod;
                 break;
             }

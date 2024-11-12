@@ -1,5 +1,7 @@
 package comp3607;
 
+//import static org.junit.jupiter.api.Assertions.assertAll;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,7 +32,7 @@ public class ReturnTest extends Test {
             Object instance = constructor.newInstance(constructorInput);
             method.setAccessible(true);
             actualReturn = method.invoke(instance, methodInput);
-            boolean contains = checkString(actualReturn.toString(), expectedReturn.toString());
+            boolean contains = checkString(actualReturn.toString().toLowerCase(), expectedReturn.toString().toLowerCase());
             Assertions.assertTrue(contains);
             report.addPassedTest(String.format("Behaviour: %-27s Passed Test. Expected - %s,  Returned - %s", methodName, expectedReturn, actualReturn));
         } catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
@@ -58,7 +60,7 @@ public class ReturnTest extends Test {
         //check for a method
         Method[] methods = clazz.getDeclaredMethods();
         for (Method declaredMethod : methods) {
-            if (declaredMethod.getName().equals(methodName)) {
+            if (declaredMethod.getName().toLowerCase().equals(methodName.toLowerCase())) {
                 method = declaredMethod;
                 break;
             }

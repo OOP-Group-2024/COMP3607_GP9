@@ -1,39 +1,41 @@
 package comp3607;
 
 import java.util.ArrayList;
-
-public class ChatBotPlatform {
-
-    // For Testing
+public class ChatBotPlatform{
     private ArrayList<ChatBot> bots;
     
-    public ChatBotPlatform() {
-        bots = new ArrayList<>();
+    public ChatBotPlatform(){
+        if (bots == null){
+            bots = new ArrayList<>();
+            ChatBot.resetCounters();
+        }
     }
-
-    public boolean addChatBot(int num) {
-        ChatBot bot= new ChatBot(num);
+    
+    public boolean addChatBot(int LLMcode){
+        if (ChatBot.limitReached()){
+            return false;
+        }
+        ChatBot bot = new ChatBot(LLMcode);
         bots.add(bot);
         return true;
     }
-
-    public String getChatBotList() {
-        StringBuilder botListBuilder = new StringBuilder();
-        int i = 0;
-        for (ChatBot bot : bots) {
-            botListBuilder.append("Bot Number: " + i + " ").append(bot.toString()).append("\n");
-            i++;
+    
+    public String getChatBotList(){
+        String Output = "-------------------------------------------\n";
+        Output = Output + "Your ChatBots\n";
+        for(int i = 0; i< bots.size();i++){
+            Output = Output + "Bot Number: " + i + " " + bots.get(i).toString() + "\n";
         }
-       return "Bot Number: 0 ChatBot Name: ChatGPT-3.5 Number Messages Used: 4"; 
-        //return botListBuilder.toString();
+        Output = Output + "Total Messages Used: " + ChatBot.getTotalNumResponsesGenerated() + "\n";
+        Output = Output + "Total Messages Remaining: " + ChatBot.getTotalNumMessagesRemaining() + "\n";
+        Output = Output + "-------------------------------------------\n";
+        return Output;
     }
-
-    public String InteractWithBot(int num, String message) {
-        if (num < 0 || num >= bots.size()) {
-            return "Incorrect Bot Number (" + num + ") Selected. Try again";
+    
+    public String interactWithBot(int botNumber, String message){
+        if((bots.size() - 1) < botNumber){
+            return ("Incorrect Bot Number (" + botNumber + ") Selected. Try Again");
         }
-
-        ChatBot selectedBot = bots.get(num);
-        return selectedBot.prompt(message);
+        return bots.get(botNumber).prompt(message);
     }
 }
