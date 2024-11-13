@@ -3,7 +3,7 @@ package comp3607;
 import java.util.List;
 
 public class ChatBotGeneratorTest extends FileTest{
-    private TestGroup chatBotGenerator;
+    private final TestGroup chatBotGenerator;
     
 
     public ChatBotGeneratorTest(){
@@ -11,8 +11,9 @@ public class ChatBotGeneratorTest extends FileTest{
     }
 
 
+    @Override
     public void setUp(Report report){
-        addMethodTest("public static", "java.lang.String", List.of(int.class), "generateChatBotLLM", chatBotGenerator);
+        addMethodTest("public static", "java.lang.String", List.of(int.class), "generateChatBotLLM", chatBotGenerator, 7.0f);
         chatBotGenerator.executeTest(ChatBotGenerator.class, report);
     }
 }

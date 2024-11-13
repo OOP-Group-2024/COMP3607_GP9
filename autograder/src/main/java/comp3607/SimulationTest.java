@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SimulationTest extends FileTest{
     
-    private TestGroup chatBotSimulation;
+    private final TestGroup chatBotSimulation;
     protected final Object[] none = List.of().toArray();
 
 
@@ -13,8 +13,9 @@ public class SimulationTest extends FileTest{
         this.chatBotSimulation = new TestGroup();
     }
 
+    @Override
     public void setUp(Report report){
-        addMethodTest("public static", "void", List.of(String[].class), "main", chatBotSimulation);
+        addMethodTest("public static", "void", List.of(String[].class), "main", chatBotSimulation, 1.0f);
         addSimulator(chatBotSimulation);
         chatBotSimulation.executeTest(ChatBotSimulation.class, report);
     }

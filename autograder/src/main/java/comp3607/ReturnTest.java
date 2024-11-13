@@ -17,16 +17,23 @@ public class ReturnTest extends Test {
     private final Object[] methodInput;    
     private final Class<?>[] parameterTypes;
 
+    private final float totalMarks;
+    
+    private int checks = 0;
+    private int checksPassed = 0;
+
     //public ReturnTest(String methodName, Object expectedReturn, Object[] args, Method method, Object instance) {
-    public ReturnTest(List<String> names, List<Object[]> input, Class<?>[] parameterTypes, Object expectedReturn) {
+    public ReturnTest(List<String> names, List<Object[]> input, Class<?>[] parameterTypes, Object expectedReturn, float totalMarks) {
         this.methodName = names.get(0);
         this.expectedReturn = expectedReturn;
         this.parameterTypes = parameterTypes;
         this.constructorInput = input.get(0);
         this.methodInput = input.get(1);
+        this.totalMarks = totalMarks;
     }
 
     public void checkBehavior(Class<?> clazz, Report report, Constructor<?> constructor, Method method) {
+        checks++;
         Object actualReturn = null;
         try {
             Object instance = constructor.newInstance(constructorInput);
@@ -35,6 +42,7 @@ public class ReturnTest extends Test {
             boolean contains = checkString(actualReturn.toString().toLowerCase(), expectedReturn.toString().toLowerCase());
             Assertions.assertTrue(contains);
             report.addPassedTest(String.format("Behaviour: %-27s Passed Test. Expected - %s,  Returned - %s", methodName, expectedReturn, actualReturn));
+            checksPassed++;
         } catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             report.addError(String.format("Behaviour: %s Failed test: %s", methodName, e.getMessage()));
         } catch (AssertionError e) {
@@ -71,6 +79,9 @@ public class ReturnTest extends Test {
         }
 
         checkBehavior(clazz, report, constructor, method);
+        float obtainedMarks = (checksPassed/checks) * totalMarks;
+        report.addMarks(obtainedMarks);
+        report.addSummary(String.format("Method %-27s Behaviour: Passed %d/%d Tests , Obtained %.2f marks", methodName, checksPassed, checks, obtainedMarks));
     }
     
     private boolean checkString(String actual, String expectedWords){

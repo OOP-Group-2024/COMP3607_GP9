@@ -7,10 +7,14 @@ import java.util.List;
 public class Report {
     private final List<String> errors;
     private final List<String> passedTests;
+    private final List<String> testSummary;
+    private float obtainedMarks;
+    private final float totalMarks = 100.0f;
 
     public Report() {
         this.errors = new ArrayList<>();
         this.passedTests = new ArrayList<>();
+        this.testSummary = new ArrayList<>();
     }
 
     public void addError(String errorMessage) {
@@ -21,12 +25,28 @@ public class Report {
         passedTests.add(message);
     }
 
+    public void addMarks(float marks) {
+        obtainedMarks += marks;    
+    }
+    public void addSummary(String message) {
+        testSummary.add(message);
+    }
+
     public List<String> getErrors() {
         return errors;
     }
 
     public List<String> getPassedTests() {
         return passedTests;
+    }
+    
+
+    public float getMarks() {
+        return obtainedMarks;
+    }
+
+    public List<String> getTestSummary() {
+        return testSummary;
     }
 
     public String generateReport() {
@@ -42,6 +62,14 @@ public class Report {
         for(String eString : errors) {
             feedback.append("- ").append(eString).append("\n");
         }
+
+        feedback.append("\nTest Summary: \n");
+        for(String sumString : testSummary) {
+            feedback.append(sumString).append("\n");
+        }
+
+        feedback.append("\nTotal Marks: ").append(String.format("%.2f", obtainedMarks))
+        .append("/").append(String.format("%.2f", totalMarks)).append("\n");
 
         return feedback.toString();
     }

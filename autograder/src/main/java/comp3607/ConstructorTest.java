@@ -14,10 +14,17 @@ public class ConstructorTest extends Test {
     private final List<Object> expectedInputs;
     private String constructorName;
 
+    private final float totalMarks;
+    
+    private int checks = 0;
+    private int checksPassed = 0;
 
-    public ConstructorTest(List<Class<?>> parameterTypes, List<Object> inputs) {  
+
+    public ConstructorTest(List<Class<?>> parameterTypes, List<Object> inputs, float totalMarks) {
+         
         this.expectedParameterTypes = parameterTypes;
-        this.expectedInputs = inputs;  
+        this.expectedInputs = inputs; 
+        this.totalMarks = totalMarks; 
  
     }
 
@@ -25,6 +32,7 @@ public class ConstructorTest extends Test {
     //Catch assertion errors if check fails and add results to report
 
     public void checkParameterTypes(Constructor<?> constructor, Report report) {
+        checks++;
         List<Class<?>> parameterTypes = Arrays.asList(constructor.getParameterTypes());
         try{
             Collections.sort(parameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
@@ -32,19 +40,20 @@ public class ConstructorTest extends Test {
             Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
             Assertions.assertEquals(mutableParameterTypes, parameterTypes);
             report.addPassedTest(String.format("Constructor: %-25s Correct paramter types", constructorName));    
-
+            checksPassed++;
         }catch (AssertionError e){
             report.addError(String.format("Constructor: %-25s Incorrect parameter types. Expected - %s, Declared - %s", constructorName, expectedParameterTypes, parameterTypes));
         }
     }
 
     public void checkConstructorInvocation(Constructor<?> constructor, Report report, Object... args) {
-
+        checks++;
         try{
             Object instance = constructor.newInstance(args);
             //Object instance = constructor.newInstance(int.class);
             Assertions.assertNotNull(instance);
             report.addPassedTest(String.format("Constructor: %-25s Successfully created an instance", constructorName));
+            checksPassed++;
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException e) {
             //report.addError("Constructor for " + constructorName + " threw exception: " + e.getMessage());
             report.addError(String.format("Constructor: %-25s threw exception: " + e.getMessage() + ", when instantiated", constructorName));
@@ -89,5 +98,9 @@ public class ConstructorTest extends Test {
             checkParameterTypes(correctConstructor, report); 
             checkConstructorInvocation(correctConstructor, report, expectedInputs.toArray());
         }
+
+        float obtainedMarks = (checksPassed/checks) * totalMarks;
+        report.addMarks(obtainedMarks);
+        report.addSummary(String.format("Constructor: %-25s(%-25s)  Passed %d/%d Tests, Obtained %.2f marks", constructorName, expectedParameterTypes.toString(), checksPassed, checks, obtainedMarks));
     }
 }

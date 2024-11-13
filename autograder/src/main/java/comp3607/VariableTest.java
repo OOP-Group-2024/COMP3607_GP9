@@ -8,16 +8,23 @@ import org.junit.jupiter.api.Assertions;
 public class VariableTest extends Test {
     private final VariableCriteria variableCriteria;
     private final String variableName;
+
+    private final float totalMarks;
     
-    public VariableTest(String variableName, VariableCriteria variableCriteria) {
+    private int checks = 0;
+    private int checksPassed = 0;
+    
+    public VariableTest(String variableName, VariableCriteria variableCriteria, float totalMarks) {
         this.variableName = variableName;
         this.variableCriteria = variableCriteria;
+        this.totalMarks = totalMarks;
     }
 
 
     //Catch assertion errors if check fails and add results to report
 
     public void checkAccessModifier(Field field, Report report) {
+        checks++;
         String actualModifier = Modifier.toString(field.getModifiers());
         String expectedAccessModifier = variableCriteria.getExpectedAccessModifier();
         try{
@@ -25,18 +32,21 @@ public class VariableTest extends Test {
             actualModifier = actualModifier.toLowerCase();
             //expectedAccessModifier = expectedAccessModifier.toLowerCase();
             Assertions.assertTrue(actualModifier.equals(expectedAccessModifier));
-            report.addPassedTest(String.format("Variable: %-28s Correct access Modifier", variableName));    
+            report.addPassedTest(String.format("Variable: %-28s Correct access Modifier", variableName)); 
+            checksPassed++;    
         } catch (AssertionError e) {
             report.addError(String.format("Variable: %-28s Incorrect access modifer. Expected - %s, Declared - %s", variableName ,expectedAccessModifier, actualModifier));
         }
     }
 
     public void checkType(Field field, Report report) {
+        checks++;
         String actualType = field.getType().getSimpleName();
         String expectedType = variableCriteria.getExpectedType();
         try{
             Assertions.assertEquals(expectedType, actualType);
-            report.addPassedTest(String.format("Variable: %-28s Correct type", variableName));    
+            report.addPassedTest(String.format("Variable: %-28s Correct type", variableName));  
+            checksPassed++;  
         } catch (AssertionError e) {
             //report.addError("Variable: " + variableName + "\tIncorrect type. Expected - " + variableCriteria.getExpectedType() + ",   Declared - " + actualType);
             report.addError(String.format("Variable: %-28s Incorrect type. Expected - %s, Declared - %s", variableName, expectedType, actualType));
@@ -60,6 +70,10 @@ public class VariableTest extends Test {
         }
         checkAccessModifier(field, report);
         checkType(field, report);
+
+        float obtainedMarks = (checksPassed/checks) * totalMarks;
+        report.addMarks(obtainedMarks);
+        report.addSummary(String.format("Variable: %-28s Passed %d/%d Tests, Obtained %.2f marks", variableName, checksPassed, checks, obtainedMarks));
     }
 
     

@@ -16,8 +16,12 @@ public class ValueTest extends Test {
     private final Object expectedValue;
     private final Class<?>[] parameterTypes;
     private final String fieldName;
+    private final float totalMarks;
     
-    public ValueTest(List<String> names, List<Object[]> input, Class<?>[] parameterTypes, Object expectedValue) {
+    private int checks = 0;
+    private int checksPassed = 0;
+    
+    public ValueTest(List<String> names, List<Object[]> input, Class<?>[] parameterTypes, Object expectedValue, float totalMarks) {
 
         this.methodName = names.get(0);
         this.fieldName = names.get(1);
@@ -25,11 +29,12 @@ public class ValueTest extends Test {
         this.methodInput = input.get(1);
         this.expectedValue = expectedValue;
         this.parameterTypes = parameterTypes;
+        this.totalMarks = totalMarks;
     }
 
 
     public void checkValue(Class<?> clazz, Report report, Constructor<?> constructor, Method method) {
-        
+        checks++;
         Object actualValue = null;
         try{
             Object instance = constructor.newInstance(constructorInput);
@@ -40,7 +45,7 @@ public class ValueTest extends Test {
             actualValue = field.get(instance);
             Assertions.assertEquals(actualValue.toString(), expectedValue.toString());
             report.addPassedTest(String.format("Behaviour: %-27s Passed Test. %s: %s", methodName, fieldName, actualValue));
-                
+            checksPassed++;    
         }catch (AssertionError e) {
             report.addError(String.format("Behaviour: %-27s Failed test: Expected %s,  %s: %s", methodName, expectedValue, fieldName, actualValue));
         }catch (IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException e) {
@@ -78,6 +83,9 @@ public class ValueTest extends Test {
         }
 
         checkValue(clazz, report, constructor, method);
+        float obtainedMarks = (checksPassed/checks) * totalMarks;
+        report.addMarks(obtainedMarks);
+        report.addSummary(String.format("Method %-27s Behaviour:  Passed %d/%d Tests. Obtained: %.2f marks", methodName, checksPassed, checks, obtainedMarks));
     }
     
 }
