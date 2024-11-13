@@ -39,7 +39,7 @@ public class ConstructorTest extends Test {
             List<Class<?>> mutableParameterTypes = new ArrayList<>(expectedParameterTypes);
             Collections.sort(mutableParameterTypes, (c1, c2) -> c1.getName().compareTo(c2.getName()));
             Assertions.assertEquals(mutableParameterTypes, parameterTypes);
-            report.addPassedTest(String.format("Constructor: %-25s Correct paramter types", constructorName));    
+            report.addPassedTest(String.format("Constructor: %-25s Correct parameter types", constructorName));    
             checksPassed++;
         }catch (AssertionError e){
             report.addError(String.format("Constructor: %-25s Incorrect parameter types. Expected - %s, Declared - %s", constructorName, expectedParameterTypes, parameterTypes));

@@ -11,6 +11,7 @@ public class Report {
     private float obtainedMarks;
     private final float totalMarks = 100.0f;
 
+
     public Report() {
         this.errors = new ArrayList<>();
         this.passedTests = new ArrayList<>();
@@ -50,6 +51,8 @@ public class Report {
     }
 
     public String generateReport() {
+
+        perfectPass();
         StringBuilder feedback = new StringBuilder();
         feedback.append("Assignment Report: \n\n");
 
@@ -72,6 +75,14 @@ public class Report {
         .append("/").append(String.format("%.2f", totalMarks)).append("\n");
 
         return feedback.toString();
+    }
+
+    private void perfectPass() {
+        float perfectTestBonus = 10.0f;
+        if (errors.isEmpty()) {
+            obtainedMarks += perfectTestBonus;
+            addSummary(String.format("Successfully passed all tests. Great Job! +%.2f", perfectTestBonus));
+        }
     }
 
 }

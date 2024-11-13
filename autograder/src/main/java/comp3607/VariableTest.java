@@ -35,7 +35,7 @@ public class VariableTest extends Test {
             report.addPassedTest(String.format("Variable: %-28s Correct access Modifier", variableName)); 
             checksPassed++;    
         } catch (AssertionError e) {
-            report.addError(String.format("Variable: %-28s Incorrect access modifer. Expected - %s, Declared - %s", variableName ,expectedAccessModifier, actualModifier));
+            report.addError(String.format("Variable: %-28s Incorrect access modifier. Expected - %s, Declared - %s", variableName ,expectedAccessModifier, actualModifier));
         }
     }
 
