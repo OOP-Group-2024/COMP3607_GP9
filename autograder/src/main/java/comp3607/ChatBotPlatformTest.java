@@ -12,7 +12,7 @@ public class ChatBotPlatformTest extends FileTest{
     }
 
     @Override
-    public void setUp(Report report){
+    public void setUp(Report report, Class clazz){
 
         addVariableTest("private", "ArrayList", "bots", chatBotPlatform, 2.0f);
 
@@ -25,6 +25,6 @@ public class ChatBotPlatformTest extends FileTest{
         addBehaviourTest(List.of("getChatBotList", "bots"), List.of(none, none), List.of(), "[]", "Total Messages 0 Remaining 10", chatBotPlatform, 4.0f);
         addMethodTest("public", "java.lang.String", List.of(int.class, String.class), "interactWithBot", chatBotPlatform, 2.0f);
         addBehaviourTest(List.of("interactWithBot","bots"), List.of(none,List.of(1,"Hello").toArray()), List.of(), "[]", "Incorrect Bot Number (1) Selected. try Again", chatBotPlatform, 3.0f);
-        chatBotPlatform.executeTest(ChatBotPlatform.class, report); 
+        chatBotPlatform.executeTest(clazz, report); 
     }
 }

@@ -11,7 +11,7 @@ public abstract class FileTest {
     */
     protected Report report = new Report();
     
-    public abstract void setUp(Report report); 
+    public abstract void setUp(Report report, Class clazz); 
 
 
     //Method to add variable test
