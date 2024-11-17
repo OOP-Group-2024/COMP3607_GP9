@@ -11,12 +11,11 @@ import java.util.Map;
 
 public class ZipCollection implements ZipContainer {
     private Path zipFolderPath;
-    private String dependenciesPath;
     private String studentId;
 
     public ZipCollection(Path path) {
         this.zipFolderPath = path;
-        this.studentId = DirectoryUtils.getStudentId(path.toString());
+        //this.studentId = DirectoryUtils.getStudentId(path.toString());
     }
 
     @Override
@@ -30,10 +29,9 @@ public class ZipCollection implements ZipContainer {
         System.out.println("Initial Student ID from path: " + (studentId != null ? studentId : "unknown"));
     
         try {
-            dependenciesPath = DirectoryUtils.getDependenciesPath();
+            DirectoryUtils.getDependenciesPath();
         } catch (IOException e) {
             System.err.println("Error getting dependencies path: " + e.getMessage());
-            dependenciesPath = "";
         }
     
         // Create reports directory if it doesn't exist
@@ -56,22 +54,22 @@ public class ZipCollection implements ZipContainer {
             Report report = new Report();
     
             // Set the student ID (will be null for unknown students) and output directory
-            report.setStudentId(studentId);
-            report.setOutputDirectory(reportsDir);
-    
-            System.out.println("Processing submission for: " + 
-                              (studentId != null ? "Student ID: " + studentId : "Unknown Student"));
-    
+            //report.setStudentId(studentId);
+            
+            
+            
             List<String> classNamesInOrder = Arrays.asList(
                 "ChatBotGenerator", 
                 "ChatBot", 
                 "ChatBotPlatform", 
                 "ChatBotSimulation"
-            );
-    
+                );
+                
             for (String className : classNamesInOrder) {
                 if (classes.containsKey(className)) {
                     File file = classes.get(className);
+                    report.setOutputDirectory(Paths.get(file.getParent()));
+                    report.setStudentId(DirectoryUtils.getStudentId(file.getParent()));
                     Class<?> compiledClass = DirectoryUtils.loadClass(
                         className, 
                         file.getParent(), 
@@ -84,7 +82,9 @@ public class ZipCollection implements ZipContainer {
                     }
                 }
             }
-    
+            
+            System.out.println("Processing submission for: " + 
+            (studentId != null ? "Student ID: " + studentId : "Unknown Student"));
             // Generate reports
             String reportContent = report.generateReport();
             saveReport(reportContent);

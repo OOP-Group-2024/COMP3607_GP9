@@ -102,28 +102,6 @@ public class DirectoryUtils {
         return null;
     }
 
-    private static void debugStudentIdExtraction(String path) {
-        System.out.println("\nDebug: Attempting to extract student ID from: " + path);
-        File file = new File(path);
-        String fullPath = file.getAbsolutePath();
-        
-        System.out.println("Checking path components:");
-        String[] pathComponents = fullPath.split("[/\\\\]");
-        for (String component : pathComponents) {
-            String cleanComponent = component.replaceAll("\\.[^.]+$", "");
-            System.out.println("- Checking component: " + cleanComponent);
-            
-            Matcher nameMatcher = STUDENT_NAME_ID_PATTERN.matcher(cleanComponent);
-            if (nameMatcher.find()) {
-                System.out.println("  Found ID in name pattern: " + nameMatcher.group(1));
-            }
-            
-            Matcher matcher = STUDENT_ID_PATTERN.matcher(cleanComponent);
-            if (matcher.find()) {
-                System.out.println("  Found standalone ID: " + matcher.group());
-            }
-        }
-    }
 
     private static String extractIdFromJavaFile(File file) {
         try {
