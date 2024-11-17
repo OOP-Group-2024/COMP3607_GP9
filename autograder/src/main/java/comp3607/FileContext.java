@@ -12,7 +12,7 @@ public class FileContext {
         this.clazz=clazz;
     }
 
-    public void testFile(Report report){
+    public void testFile(Report report, Class clazz){
         fileTest.setUp(report, clazz);
     }
 }

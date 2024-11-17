@@ -14,7 +14,6 @@ import java.util.zip.ZipInputStream;
 public class ZipIterator implements IteratorInterface {
     private final String mainZipPath;
     private Iterator<File> subZipIterator;
- 
 
     public ZipIterator(String mainZipPath) {
         this.mainZipPath = mainZipPath;
@@ -56,42 +55,30 @@ public class ZipIterator implements IteratorInterface {
         }
     }
 
-    @Override
-    public boolean hasNext() {
-        return subZipIterator != null && subZipIterator.hasNext();
-    }
+    private Map<String, File> extractJavaFilesFromSubZip(File subZip) {
+        Map<String, File> javaFiles = new HashMap<>();
+        File tempDir = new File(subZip.getParent(), subZip.getName().replace(".zip", ""));
 
-    @Override
-    public Map<String, Class<?>> next() {
-        File subZip = subZipIterator.next();
-        return loadClassesFromSubZip(subZip);
-    }
+        if (!tempDir.exists()) {
+            tempDir.mkdirs();
+        }
 
-    private Map<String, Class<?>> loadClassesFromSubZip(File subZip) {
-        Map<String, Class<?>> classes = new HashMap<>();
-
+        // Unzip the sub-zip to a temporary directory
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(subZip))) {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
-                    // Extract Java file and load it as a Class
-                    File tempJavaFile = new File(subZip.getParent(), entry.getName());
-                    try (FileOutputStream fos = new FileOutputStream(tempJavaFile)) {
+                    // Extract Java file
+                    //String javaFileName = entry.getName().substring(0, entry.getName().lastIndexOf(".java"));
+                    File javaFile = new File(tempDir, entry.getName().replace(".java", ""));
+                    try (FileOutputStream fos = new FileOutputStream(javaFile)) {
                         byte[] buffer = new byte[1024];
                         int length;
                         while ((length = zipInputStream.read(buffer)) > 0) {
                             fos.write(buffer, 0, length);
                         }
                     }
-                    // Load the class from the Java file
-                    try {
-                        String className = tempJavaFile.getName().replace(".java", "");
-                        Class<?> clazz = Class.forName(className);
-                        classes.put(className, clazz);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    tempJavaFile.delete(); // Clean up the temporary Java file
+                    javaFiles.put(entry.getName().replace(".java", ""), javaFile);
                 }
                 zipInputStream.closeEntry();
             }
@@ -99,7 +86,17 @@ public class ZipIterator implements IteratorInterface {
             e.printStackTrace();
         }
 
-        return classes;
+        return javaFiles;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return subZipIterator != null && subZipIterator.hasNext();
+    }
+
+    @Override
+    public Map<String, File> next() {
+        File subZip = subZipIterator.next();
+        return extractJavaFilesFromSubZip(subZip);
     }
 }
-

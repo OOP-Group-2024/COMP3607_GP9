@@ -1,10 +1,11 @@
 package comp3607;
 
+import java.io.File;
 import java.util.Map;
 
 public interface IteratorInterface {
     public boolean hasNext();
 
-    public Map<String, Class<?>> next();
+    public Map<String, File> next();
 
 }
