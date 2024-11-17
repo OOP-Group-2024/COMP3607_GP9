@@ -11,11 +11,10 @@ import java.util.Map;
 public class ZipCollection implements ZipContainer {
     private Path zipFolderPath;
     private String dependenciesPath;
-    private String studentId;  // Added to store student ID
+    private String studentId;
 
     public ZipCollection(Path path) {
         this.zipFolderPath = path;
-        // Extract student ID when zip collection is created
         this.studentId = DirectoryUtils.getStudentId(path.toString());
     }
 
@@ -36,15 +35,23 @@ public class ZipCollection implements ZipContainer {
             dependenciesPath = "";
         }
 
+        // Create reports directory if it doesn't exist
+        Path reportsDir = Paths.get(zipFolderPath.getParent().toString(), "reports");
+        try {
+            if (!reportsDir.toFile().exists()) {
+                reportsDir.toFile().mkdirs();
+            }
+        } catch (Exception e) {
+            System.err.println("Error creating reports directory: " + e.getMessage());
+        }
+
         while (iterator.hasNext()) {
             Map<String, File> classes = iterator.next();
 
-            // Create a context and report for each iteration
             FileContext context = new FileContext();
             Report report = new Report();
-            
-            // Set the student ID in the report
             report.setStudentId(studentId);
+            report.setOutputDirectory(reportsDir);  // Set the output directory for PDF generation
 
             List<String> classNamesInOrder = Arrays.asList(
                 "ChatBotGenerator", 
@@ -66,8 +73,10 @@ public class ZipCollection implements ZipContainer {
                 }
             }
 
-            // Generate and save the report with student ID
+            // Generate the report (which will now create both text and PDF versions)
             String reportContent = report.generateReport();
+            
+            // Save text version of the report
             saveReport(reportContent);
             System.out.println(reportContent);
         }
@@ -81,16 +90,16 @@ public class ZipCollection implements ZipContainer {
                 reportsDir.toFile().mkdirs();
             }
 
-            // Create report file with student ID in name
+            // Create text report file with student ID in name
             String reportFileName = String.format("report_%s.txt", studentId != null ? studentId : "unknown");
             Path reportPath = reportsDir.resolve(reportFileName);
             
             // Write report content to file
             java.nio.file.Files.write(reportPath, reportContent.getBytes());
-            System.out.println("Report saved to: " + reportPath);
+            System.out.println("Text report saved to: " + reportPath);
 
         } catch (IOException e) {
-            System.err.println("Error saving report: " + e.getMessage());
+            System.err.println("Error saving text report: " + e.getMessage());
         }
     }
 
