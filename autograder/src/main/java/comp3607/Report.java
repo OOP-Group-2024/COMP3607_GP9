@@ -10,12 +10,17 @@ public class Report {
     private final List<String> testSummary;
     private float obtainedMarks;
     private final float totalMarks = 100.0f;
+    private String studentId;
 
 
     public Report() {
         this.errors = new ArrayList<>();
         this.passedTests = new ArrayList<>();
         this.testSummary = new ArrayList<>();
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public void addError(String errorMessage) {
@@ -54,8 +59,15 @@ public class Report {
 
         perfectPass();
         StringBuilder feedback = new StringBuilder();
-        feedback.append("Assignment Report: \n\n");
+        
+        // Add student ID to report header if available
+        feedback.append("Assignment Report");
+        if (studentId != null && !studentId.isEmpty()) {
+            feedback.append(" for Student ID: ").append(studentId);
+        }
+        feedback.append("\n\n");
 
+        // Rest of your existing report generation code...
         feedback.append("Passed Tests : \n");
         for(String ptString : passedTests) {
             feedback.append("- ").append(ptString).append("\n");
@@ -76,7 +88,7 @@ public class Report {
 
         return feedback.toString();
     }
-
+    
     private void perfectPass() {
         float perfectTestBonus = 10.0f;
         if (errors.isEmpty()) {

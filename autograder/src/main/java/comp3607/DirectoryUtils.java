@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -20,6 +22,41 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 public class DirectoryUtils {
+
+    /**
+    * Extracts the student ID from a file path.
+     * Assumes the ID is either:
+     * 1. In the zip file name (e.g., "816000000.zip")
+     * 2. In a parent directory name
+     * 3. In the unzipped folder name
+     *
+     * @param path The file or directory path to extract the ID from
+     * @return The student ID if found, or null if no valid ID is found
+     */
+    public static String getStudentId(String path) {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+
+        // Define the pattern for an 8-digit student ID
+        Pattern idPattern = Pattern.compile("\\b\\d{8}\\b");
+        
+        // Split the path into components
+        String[] pathComponents = path.split("[/\\\\]");
+        
+        // Check each component for a student ID
+        for (String component : pathComponents) {
+            // Remove any file extensions
+            String cleanComponent = component.replaceAll("\\.[^.]+$", "");
+            
+            Matcher matcher = idPattern.matcher(cleanComponent);
+            if (matcher.find()) {
+                return matcher.group();
+            }
+        }
+
+        return null;
+    }
 
     public static void createInputZipFolder() {
         

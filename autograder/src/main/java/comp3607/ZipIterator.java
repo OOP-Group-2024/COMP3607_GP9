@@ -14,9 +14,11 @@ import java.util.zip.ZipInputStream;
 public class ZipIterator implements IteratorInterface {
     private final String mainZipPath;
     private Iterator<File> subZipIterator;
+    private Map<File, String> zipStudentIds; // Store student IDs for each zip
 
     public ZipIterator(String mainZipPath) {
         this.mainZipPath = mainZipPath;
+        this.zipStudentIds = new HashMap<>();
         unzipMainFolder();
     }
 
@@ -34,6 +36,13 @@ public class ZipIterator implements IteratorInterface {
                 if (!entry.isDirectory() && entry.getName().endsWith(".zip")) {
                     // Extract the sub-zip files
                     File subZipFile = new File(tempDir, entry.getName());
+                    
+                    // Store the student ID for this zip file
+                    String studentId = DirectoryUtils.getStudentId(entry.getName());
+                    if (studentId != null) {
+                        zipStudentIds.put(subZipFile, studentId);
+                    }
+                    
                     try (FileOutputStream fos = new FileOutputStream(subZipFile)) {
                         byte[] buffer = new byte[1024];
                         int length;
@@ -57,20 +66,26 @@ public class ZipIterator implements IteratorInterface {
 
     private Map<String, File> extractJavaFilesFromSubZip(File subZip) {
         Map<String, File> javaFiles = new HashMap<>();
-        File tempDir = new File(subZip.getParent(), subZip.getName().replace(".zip", ""));
+        // Use student ID in the extraction folder name if available
+        String studentId = zipStudentIds.get(subZip);
+        String folderName = studentId != null ? 
+            subZip.getName().replace(".zip", "") + "_" + studentId :
+            subZip.getName().replace(".zip", "");
+            
+        File tempDir = new File(subZip.getParent(), folderName);
 
         if (!tempDir.exists()) {
             tempDir.mkdirs();
         }
 
-        // Unzip the sub-zip to a temporary directory
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(subZip))) {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
-                    // Extract Java file
-                    //String javaFileName = entry.getName().substring(0, entry.getName().lastIndexOf(".java"));
-                    File javaFile = new File(tempDir, entry.getName().replace(".java", ""));
+                    File javaFile = new File(tempDir, entry.getName());
+                    // Create parent directories if they don't exist
+                    javaFile.getParentFile().mkdirs();
+                    
                     try (FileOutputStream fos = new FileOutputStream(javaFile)) {
                         byte[] buffer = new byte[1024];
                         int length;
@@ -78,7 +93,11 @@ public class ZipIterator implements IteratorInterface {
                             fos.write(buffer, 0, length);
                         }
                     }
-                    javaFiles.put(entry.getName().replace(".java", ""), javaFile);
+                    String className = entry.getName().substring(
+                        entry.getName().lastIndexOf('/') + 1,
+                        entry.getName().lastIndexOf('.')
+                    );
+                    javaFiles.put(className, javaFile);
                 }
                 zipInputStream.closeEntry();
             }
@@ -98,5 +117,9 @@ public class ZipIterator implements IteratorInterface {
     public Map<String, File> next() {
         File subZip = subZipIterator.next();
         return extractJavaFilesFromSubZip(subZip);
+    }
+
+    public String getCurrentStudentId(File subZip) {
+        return zipStudentIds.get(subZip);
     }
 }

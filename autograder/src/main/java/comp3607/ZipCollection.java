@@ -8,16 +8,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class ZipCollection implements ZipContainer{
+public class ZipCollection implements ZipContainer {
+    private Path zipFolderPath;
+    private String dependenciesPath;
+    private String studentId;  // Added to store student ID
 
-    Path zipFolderPath = Paths.get(System.getProperty("user.dir"), "input_zip_here");
-
-    String dependenciesPath;
-
-    
-
-    public ZipCollection(Path path){
-        this.zipFolderPath=path;
+    public ZipCollection(Path path) {
+        this.zipFolderPath = path;
+        // Extract student ID when zip collection is created
+        this.studentId = DirectoryUtils.getStudentId(path.toString());
     }
 
     @Override
@@ -25,57 +24,75 @@ public class ZipCollection implements ZipContainer{
         return new ZipIterator(mainZipPath);
     }
 
-    public void runTest (){
+    public void runTest() {
         ZipIterator iterator = createIterator(zipFolderPath.toString());
         System.out.println("Testing:\n");
+        System.out.println("Processing submission for Student ID: " + studentId);
 
-        try{
+        try {
             dependenciesPath = DirectoryUtils.getDependenciesPath();
         } catch (IOException e) {
             System.err.println("Error getting dependencies path: " + e.getMessage());
             dependenciesPath = "";
         }
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map<String, File> classes = iterator.next();
-
-            // Create the test objects
-            // ChatBotTest chatBotTest = new ChatBotTest();
-            // ChatBotPlatformTest chatBotPlatformTest = new ChatBotPlatformTest();
-            // ChatBotGeneratorTest chatBotGeneratorTest = new ChatBotGeneratorTest();
-            // SimulationTest simulationTest = new SimulationTest();
 
             // Create a context and report for each iteration
             FileContext context = new FileContext();
             Report report = new Report();
+            
+            // Set the student ID in the report
+            report.setStudentId(studentId);
 
-            List<String> classNamesInOrder = Arrays.asList("ChatBotGenerator", "ChatBot", "ChatBotPlatform", "ChatBotSimulation");
+            List<String> classNamesInOrder = Arrays.asList(
+                "ChatBotGenerator", 
+                "ChatBot", 
+                "ChatBotPlatform", 
+                "ChatBotSimulation"
+            );
 
             for (String className : classNamesInOrder) {
-                if(classes.containsKey(className)){
+                if (classes.containsKey(className)) {
                     File file = classes.get(className);
-
-                    dependenciesPath=Paths.get("src", "main", "resources", "dependencies").toString();
+                    dependenciesPath = Paths.get("src", "main", "resources", "dependencies").toString();
                 
                     Class<?> compiledClass = DirectoryUtils.loadClass(className, file.getParent(), dependenciesPath);
                     if (compiledClass != null) {
-                        // Run the test for this class if it compiles
                         context.setTest(getTestInstance(className));
                         context.testFile(report, compiledClass);
                     }
                 }
-                // else{
-                //     File tempFile = new File(Paths.get("src", "main", "resources", "dependencies", className).toString());
-                //     System.out.println(tempFile.getAbsoluteFile());
-                //     DirectoryUtils.compileFile(tempFile);
-                // }
             }
 
-            // Print the report for this iteration
-            System.out.println(report.generateReport());
+            // Generate and save the report with student ID
+            String reportContent = report.generateReport();
+            saveReport(reportContent);
+            System.out.println(reportContent);
         }
     }
 
+    private void saveReport(String reportContent) {
+        try {
+            // Create reports directory if it doesn't exist
+            Path reportsDir = Paths.get(zipFolderPath.getParent().toString(), "reports");
+            if (!reportsDir.toFile().exists()) {
+                reportsDir.toFile().mkdirs();
+            }
+
+            // Create report file with student ID in name
+            String reportFileName = String.format("report_%s.txt", studentId != null ? studentId : "unknown");
+            Path reportPath = reportsDir.resolve(reportFileName);
+            
+            // Write report content to file
+            java.nio.file.Files.write(reportPath, reportContent.getBytes());
+            System.out.println("Report saved to: " + reportPath);
+
+        } catch (IOException e) {
+            System.err.println("Error saving report: " + e.getMessage());
+        }
+    }
 
     private static FileTest getTestInstance(String className) {
         switch (className) {
