@@ -23,24 +23,24 @@ public class GeneratePDF {
     
     public static void generatePDF(String reportContent, String destinationDir, String studentId) {
         try {
-            // Create filename with just student ID
+            // Create filename with student ID or "unknown"
             String fileName = String.format("report_%s.pdf", studentId);
             Path outputPath = Paths.get(destinationDir, fileName);
-
+    
             // Create PDF document
-            Document document = new Document(PageSize.A4, 36, 36, 60, 36); // margins: left, right, top, bottom
+            Document document = new Document(PageSize.A4, 36, 36, 60, 36);
             PdfWriter.getInstance(document, new FileOutputStream(outputPath.toString()));
             document.open();
-
-            // Add header with student ID
+    
+            // Add header
             addHeader(document, studentId);
             
             // Parse and add content sections
             addFormattedContent(document, reportContent);
-
+    
             document.close();
             System.out.println("PDF report generated successfully at: " + outputPath.toString());
-
+    
         } catch (DocumentException | IOException e) {
             System.err.println("Error generating PDF report: " + e.getMessage());
             e.printStackTrace();

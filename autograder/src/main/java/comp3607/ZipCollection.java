@@ -2,6 +2,7 @@ package comp3607;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -25,58 +26,67 @@ public class ZipCollection implements ZipContainer {
 
     public void runTest() {
         ZipIterator iterator = createIterator(zipFolderPath.toString());
-        System.out.println("Testing:\n");
-        System.out.println("Processing submission for Student ID: " + studentId);
-
+        System.out.println("\nStarting test execution:");
+        System.out.println("Initial Student ID from path: " + (studentId != null ? studentId : "unknown"));
+    
         try {
             dependenciesPath = DirectoryUtils.getDependenciesPath();
         } catch (IOException e) {
             System.err.println("Error getting dependencies path: " + e.getMessage());
             dependenciesPath = "";
         }
-
+    
         // Create reports directory if it doesn't exist
         Path reportsDir = Paths.get(zipFolderPath.getParent().toString(), "reports");
         try {
-            if (!reportsDir.toFile().exists()) {
-                reportsDir.toFile().mkdirs();
+            if (!Files.exists(reportsDir)) {
+                Files.createDirectories(reportsDir);
+                System.out.println("Created reports directory at: " + reportsDir);
             }
         } catch (Exception e) {
             System.err.println("Error creating reports directory: " + e.getMessage());
+            e.printStackTrace();
+            return;
         }
-
+    
         while (iterator.hasNext()) {
             Map<String, File> classes = iterator.next();
-
+    
             FileContext context = new FileContext();
             Report report = new Report();
+    
+            // Set the student ID (will be null for unknown students) and output directory
             report.setStudentId(studentId);
-            report.setOutputDirectory(reportsDir);  // Set the output directory for PDF generation
-
+            report.setOutputDirectory(reportsDir);
+    
+            System.out.println("Processing submission for: " + 
+                              (studentId != null ? "Student ID: " + studentId : "Unknown Student"));
+    
             List<String> classNamesInOrder = Arrays.asList(
                 "ChatBotGenerator", 
                 "ChatBot", 
                 "ChatBotPlatform", 
                 "ChatBotSimulation"
             );
-
+    
             for (String className : classNamesInOrder) {
                 if (classes.containsKey(className)) {
                     File file = classes.get(className);
-                    dependenciesPath = Paths.get("src", "main", "resources", "dependencies").toString();
-                
-                    Class<?> compiledClass = DirectoryUtils.loadClass(className, file.getParent(), dependenciesPath);
+                    Class<?> compiledClass = DirectoryUtils.loadClass(
+                        className, 
+                        file.getParent(), 
+                        Paths.get("src", "main", "resources", "dependencies").toString()
+                    );
+                    
                     if (compiledClass != null) {
                         context.setTest(getTestInstance(className));
                         context.testFile(report, compiledClass);
                     }
                 }
             }
-
-            // Generate the report (which will now create both text and PDF versions)
+    
+            // Generate reports
             String reportContent = report.generateReport();
-            
-            // Save text version of the report
             saveReport(reportContent);
             System.out.println(reportContent);
         }
