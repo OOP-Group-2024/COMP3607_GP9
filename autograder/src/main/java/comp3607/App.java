@@ -49,6 +49,7 @@ public class App {
                 if (file.isFile() && file.getName().endsWith(".zip")) {
                     ZipCollection test = new ZipCollection(file.toPath());
                     test.runTest();
+                    
                 } else {
                     System.out.println("Skipping non-zip file: " + file.getName());
                 }

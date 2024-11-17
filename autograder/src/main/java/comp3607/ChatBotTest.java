@@ -14,7 +14,7 @@ public class ChatBotTest extends FileTest{
     }
 
     @Override
-    public void setUp(Report report, Class clazz){
+    public void setUp(Report report, Class<?> clazz){
         List<Class<?>> noParams = Collections.emptyList();
         addVariableTest("private", "String", "chatBotName", chatBot, 1.0f);
         addVariableTest("private", "int", "numResponsesGenerated", chatBot, 1.0f);

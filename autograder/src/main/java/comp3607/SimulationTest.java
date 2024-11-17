@@ -14,7 +14,7 @@ public class SimulationTest extends FileTest{
     }
 
     @Override
-    public void setUp(Report report, Class clazz){
+    public void setUp(Report report, Class<?> clazz){
         addMethodTest("public static", "void", List.of(String[].class), "main", chatBotSimulation, 1.0f);
         addSimulator(chatBotSimulation);
         chatBotSimulation.executeTest(clazz, report);

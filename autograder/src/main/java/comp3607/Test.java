@@ -11,12 +11,12 @@ public abstract class Test {
     }
 
     protected void setup(Class<?> clazz) {
-        System.out.println("Setting up for class: " + clazz.getName());
+        //System.out.println("Setting up for class: " + clazz.getName());
     }
 
     protected abstract void executeTest(Class<?> clazz, Report report);
 
     protected void cleanUp(Class<?> clazz) {
-        System.out.println("Cleaning up class: " + clazz.getName());
+        //System.out.println("Cleaning up class: " + clazz.getName());
     }
 }

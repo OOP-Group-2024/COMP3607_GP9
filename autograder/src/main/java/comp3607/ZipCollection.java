@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ZipCollection implements ZipContainer {
-    private Path zipFolderPath;
+    private final Path zipFolderPath;
     private String studentId;
 
     public ZipCollection(Path path) {
@@ -118,16 +118,19 @@ public class ZipCollection implements ZipContainer {
 
     private static FileTest getTestInstance(String className) {
         switch (className) {
-            case "ChatBot":
+            case "ChatBot" -> {
                 return new ChatBotTest();
-            case "ChatBotPlatform":
+            }
+            case "ChatBotPlatform" -> {
                 return new ChatBotPlatformTest();
-            case "ChatBotGenerator":
+            }
+            case "ChatBotGenerator" -> {
                 return new ChatBotGeneratorTest();
-            case "ChatBotSimulation":
+            }
+            case "ChatBotSimulation" -> {
                 return new SimulationTest();
-            default:
-                throw new IllegalArgumentException("No test available for " + className);
+            }
+            default -> throw new IllegalArgumentException("No test available for " + className);
         }
     }
 }

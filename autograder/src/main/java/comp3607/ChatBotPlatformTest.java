@@ -12,9 +12,9 @@ public class ChatBotPlatformTest extends FileTest{
     }
 
     @Override
-    public void setUp(Report report, Class clazz){
+    public void setUp(Report report, Class<?> clazz){
 
-        addVariableTest("private", "ArrayList", "bots", chatBotPlatform, 2.0f);
+        addVariableTest("", "ArrayList", "bots", chatBotPlatform, 2.0f);
 
         addConstructorTest(List.of(), List.of(), chatBotPlatform, 1.0f);
         addInstantiationTest("bots", List.of(), List.of() , List.of(), chatBotPlatform, 1.0f);

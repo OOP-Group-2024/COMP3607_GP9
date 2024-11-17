@@ -31,7 +31,7 @@ public class VariableTest extends Test {
             //Assertions.assertEquals(expectedAccessModifier, actualModifier);
             actualModifier = actualModifier.toLowerCase();
             //expectedAccessModifier = expectedAccessModifier.toLowerCase();
-            Assertions.assertTrue(actualModifier.equals(expectedAccessModifier));
+            Assertions.assertTrue(actualModifier.contains(expectedAccessModifier));
             report.addPassedTest(String.format("Variable: %-28s Correct access Modifier", variableName)); 
             checksPassed++;    
         } catch (AssertionError e) {

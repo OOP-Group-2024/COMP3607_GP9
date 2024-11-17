@@ -1,5 +1,6 @@
 package comp3607;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -75,19 +76,20 @@ public class Report {
         feedback.append(" for Student ID: ").append(reportId);
         feedback.append("\n\n");
     
-        feedback.append("Passed Tests : \n");
+      /*   feedback.append("Passed Tests : \n");
         for(String ptString : passedTests) {
             feedback.append("- ").append(ptString).append("\n");
-        }
+        } */
     
-        feedback.append("\nErrors: \n");
-        for(String eString : errors) {
-            feedback.append("- ").append(eString).append("\n");
-        }
     
         feedback.append("\nTest Summary: \n");
         for(String sumString : testSummary) {
             feedback.append(sumString).append("\n");
+        }
+
+        feedback.append("\nErrors: \n");
+        for(String eString : errors) {
+            feedback.append("- ").append(eString).append("\n");
         }
     
         feedback.append("\nTotal Marks: ").append(String.format("%.2f", obtainedMarks))
@@ -103,9 +105,8 @@ public class Report {
                 
                 GeneratePDF.generatePDF(feedback.toString(), outputDirectory.toString(), reportId);
                 System.out.println("Generated PDF report for " + (reportId.equals("unknown") ? "unknown student" : "student ID: " + reportId));
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.err.println("Error generating PDF report: " + e.getMessage());
-                e.printStackTrace();
             }
         } else {
             System.err.println("Cannot generate PDF - Output directory not set");
