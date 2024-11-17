@@ -58,17 +58,15 @@ public class ZipCollection implements ZipContainer{
                     dependenciesPath=Paths.get("src", "main", "resources", "dependencies").toString();
                 
                     Class<?> compiledClass = DirectoryUtils.loadClass(className, file.getParent(), dependenciesPath);
+                    System.out.println(file.getParent());
                     if (compiledClass != null) {
                         // Run the test for this class if it compiles
                         context.setTest(getTestInstance(className));
                         context.testFile(report, compiledClass);
                     }
                 }
-                // else{
-                //     File tempFile = new File(Paths.get("src", "main", "resources", "dependencies", className).toString());
-                //     System.out.println(tempFile.getAbsoluteFile());
-                //     DirectoryUtils.compileFile(tempFile);
-                // }
+                else{
+                }
             }
 
             // Print the report for this iteration

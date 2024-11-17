@@ -70,7 +70,7 @@ public class ZipIterator implements IteratorInterface {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
                     // Extract Java file
                     //String javaFileName = entry.getName().substring(0, entry.getName().lastIndexOf(".java"));
-                    File javaFile = new File(tempDir, entry.getName().replace(".java", ""));
+                    File javaFile = new File(tempDir, entry.getName());
                     try (FileOutputStream fos = new FileOutputStream(javaFile)) {
                         byte[] buffer = new byte[1024];
                         int length;
