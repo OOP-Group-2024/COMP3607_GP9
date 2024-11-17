@@ -75,10 +75,13 @@ public class ZipCollection implements ZipContainer {
                         file.getParent(), 
                         Paths.get("src", "main", "resources", "dependencies").toString()
                     );
+
                     
                     if (compiledClass != null) {
+                        System.out.println("\n running tests for:"+className);
                         context.setTest(getTestInstance(className));
                         context.testFile(report, compiledClass);
+                        System.out.println("\n===================================\n");
                     }
                 }
             }

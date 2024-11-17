@@ -233,6 +233,7 @@ public class DirectoryUtils {
     }
 
     public static Class<?> loadClass(String className, String mainDirPath, String backupDirPath) {
+        boolean exist = true;
         try {
             List<String> requiredFiles = Arrays.asList(
                 "ChatBotGenerator.java", 
@@ -252,8 +253,11 @@ public class DirectoryUtils {
 
                 if (mainFile.exists()) {
                     filesToCompile.add(mainFile);
+                    exist = true;
                 } else if (backupFile.exists()) {
+                    System.out.println("CLASS +"+mainFile.getName()+" is missing from student submission");
                     filesToCompile.add(backupFile);
+                    exist = false;
                 } else {
                     System.err.println("Missing required file: " + fileName);
                     System.err.println("Checked in:\n  " + mainDir.getAbsolutePath() + 
@@ -269,7 +273,13 @@ public class DirectoryUtils {
             }
 
             // Load the requested class
-            return loadCompiledClass(className, mainDir);
+            if(exist){
+                return loadCompiledClass(className, mainDir);
+            }
+            else{
+                return null;
+            }
+            
 
         } catch (Exception e) {
             System.err.println("Error loading class " + className + ": " + e.getMessage());
