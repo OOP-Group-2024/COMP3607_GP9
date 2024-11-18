@@ -13,6 +13,8 @@ public class Report {
     private float obtainedMarks;
     private final float totalMarks = 100.0f;
     private String studentId;
+    private boolean mainExists = false;
+    private boolean runs = false;
     private Path outputDirectory;
 
     public Report() {
@@ -49,6 +51,14 @@ public class Report {
         testSummary.add(message);
     }
 
+    public void setMainExists(boolean mainExists) {
+        this.mainExists = mainExists;
+    }
+
+    public void setRuns(boolean runs) {
+        this.runs = runs;
+    }
+
     public List<String> getErrors() {
         return errors;
     }
@@ -67,6 +77,7 @@ public class Report {
 
     public String generateReport() {
         perfectPass();
+        runsMarks();
         StringBuilder feedback = new StringBuilder();
         
         // Use "unknown" if studentId is null or empty
@@ -121,5 +132,12 @@ public class Report {
             obtainedMarks += perfectTestBonus;
             addSummary(String.format("Successfully passed all tests. Great Job! +%.2f", perfectTestBonus));
         }
+    }
+
+    private void runsMarks() {
+        if (mainExists && runs) {
+            this.addMarks(10.0f);
+        }
+       
     }
 }

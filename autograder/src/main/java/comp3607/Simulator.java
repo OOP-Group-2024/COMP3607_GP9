@@ -89,10 +89,7 @@ public class Simulator extends Test{
             report.addError(String.format("Simulation: %-26s Failed", "Error on main"));
             runBonus = false;
         }
-        if(runBonus){
-            report.addMarks(10.0f);
-            report.addSummary("Successfully Runs: +10");
-        }
+        report.setRuns(runBonus);
     }
  
     

@@ -56,7 +56,6 @@ Successfully tested:
 getChatBotList(2)
  Marks: 2/2
 Successfully incremented messageNumber and stopped at limit. Marks: 2/2
-Successfully Runs: +10
 All files compiled successfully +5
 Successfully passed all tests. Great Job! +10.00
 

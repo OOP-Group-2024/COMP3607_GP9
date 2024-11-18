@@ -89,6 +89,9 @@ public class ZipCollection implements ZipContainer {
                 report.addMarks(5.0f);
                 report.addSummary("All files compiled successfully +5");
             }
+            else{
+                report.addError(String.format("%d/%d files compiled successfully", compiled, classNamesInOrder.size()));;
+            }
             System.out.println("Processing submission for: " + 
             (studentId != null ? "Student ID: " + studentId : "Unknown Student"));
             // Generate reports
