@@ -41,18 +41,17 @@ public class ZipCollection implements ZipContainer {
                 Files.createDirectories(reportsDir);
                 System.out.println("Created reports directory at: " + reportsDir);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Error creating reports directory: " + e.getMessage());
-            e.printStackTrace();
             return;
         }
     
         while (iterator.hasNext()) {
             Map<String, File> classes = iterator.next();
-    
+        
             FileContext context = new FileContext();
             Report report = new Report();
-    
+            int compiled = 0;
             // Set the student ID (will be null for unknown students) and output directory
             //report.setStudentId(studentId);
             
@@ -82,10 +81,14 @@ public class ZipCollection implements ZipContainer {
                         context.setTest(getTestInstance(className));
                         context.testFile(report, compiledClass);
                         System.out.println("\n===================================\n");
+                        compiled++;
                     }
                 }
             }
-            
+            if(compiled == classNamesInOrder.size()){
+                report.addMarks(5.0f);
+                report.addSummary("All files compiled successfully +5");
+            }
             System.out.println("Processing submission for: " + 
             (studentId != null ? "Student ID: " + studentId : "Unknown Student"));
             // Generate reports

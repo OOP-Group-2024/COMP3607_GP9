@@ -28,14 +28,14 @@ public class App {
         if (!DirectoryUtils.hasItems()) {
             System.out.println("The folder 'input_zip_here' is empty. Place your zip files in the folder and type 'run' to continue.");
             
-            // Wait for the user to type "run"
-            Scanner scanner = new Scanner(System.in);
-            String userInput;
-            do {
-                System.out.print("Type 'run' to proceed: ");
-                userInput = scanner.nextLine().trim();
-            } while (!"run".equalsIgnoreCase(userInput) || !DirectoryUtils.hasItems());
-            
+            try ( // Wait for the user to type "run"
+                    Scanner scanner = new Scanner(System.in)) {
+                String userInput;
+                do {
+                    System.out.print("Type 'run' to proceed: ");
+                    userInput = scanner.nextLine().trim();
+                } while (!"run".equalsIgnoreCase(userInput) || !DirectoryUtils.hasItems());
+            }
             System.out.println("Items found in 'input_zip_here'. Proceeding...");
         } else {
             System.out.println("Items found in 'input_zip_here'. Proceeding...");
@@ -49,7 +49,7 @@ public class App {
                 if (file.isFile() && file.getName().endsWith(".zip")) {
                     ZipCollection test = new ZipCollection(file.toPath());
                     test.runTest();
-                    
+
                 } else {
                     System.out.println("Skipping non-zip file: " + file.getName());
                 }

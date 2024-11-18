@@ -28,7 +28,7 @@ Method limitReached                Behaviour:  Passed 1/1 Tests. Obtained: 1.00 
 Method limitReached                Behaviour: Passed 1/1 Tests , Obtained 1.00 marks
 Method: generateResponse               Passed 3/3 Tests, Obtained 2.00 marks
 Method generateResponse            Behaviour:  Passed 1/1 Tests. Obtained: 1.00 marks
-Method generateResponse            Behaviour: Passed 0/1 Tests , Obtained 0.00 marks
+Method generateResponse            Behaviour: Passed 1/1 Tests , Obtained 1.00 marks
 Method: prompt                         Passed 3/3 Tests, Obtained 1.00 marks
 Method prompt                      Behaviour:  Passed 1/1 Tests. Obtained: 1.00 marks
 Method prompt                      Behaviour: Passed 1/1 Tests , Obtained 1.00 marks
@@ -56,8 +56,10 @@ Successfully tested:
 getChatBotList(2)
  Marks: 2/2
 Successfully incremented messageNumber and stopped at limit. Marks: 2/2
+Successfully Runs: +10
+All files compiled successfully +5
+Successfully passed all tests. Great Job! +10.00
 
 Errors: 
-- Behaviour: generateResponse Failed test: Expected 1 ChatGPT-3.5,  returned: (Message# 2 ) Response from ChatGPT-3.5 >>generatedTextHere 
 
-Total Marks: 74.00/100.00
+Total Marks: 100.00/100.00

@@ -8,12 +8,14 @@ import java.util.Stack;
 import org.junit.jupiter.api.Assertions;
 
 public class Simulator extends Test{
+    
+    private boolean runBonus = true;
 
     public Simulator(){
         
     }
 
-    public void simulate(Report report){
+    public void simulate(Report report ){
         
         ChatBotPlatform platform = buildPlatform();
         List<String> responses = buildResponses();
@@ -27,6 +29,7 @@ public class Simulator extends Test{
             report.addSummary("Successfully tested:\nDeclare ChatBotPlatform()\nAddChatBot\ngetChatBotList(1)\n Marks: 5/5");
         }catch (AssertionError e){
             report.addError(String.format("Simulation: %-26s Failed to return correct list values", "getChatBotList(1)"));
+            runBonus = false;
         }
 
         //Interacting with Bot 15 times
@@ -41,6 +44,7 @@ public class Simulator extends Test{
             }
         }catch (AssertionError e){
             report.addError(String.format("Simulation: %-26s Returned incorrect values, or incorrect order", "interactWithBot"));
+            runBonus = false;
         }
         report.addMarks((passes/15) * 4.0f);
         report.addSummary(String.format("Interact with Bots (15 times): Passed %d/15 Tests, Obtained %.2f marks", passes, (passes/15) * 4.0f));
@@ -55,6 +59,7 @@ public class Simulator extends Test{
             report.addSummary("Successfully tested:\ngetChatBotList(2)\n Marks: 2/2");
         }catch (AssertionError e){
             report.addError(String.format("Simulation: %-26s Failed to return correct list values", "getChatBotList(2)"));
+            runBonus = false;
         }
 
         //Checking message number consistency
@@ -69,16 +74,24 @@ public class Simulator extends Test{
             report.addSummary("Successfully incremented messageNumber and stopped at limit. Marks: 2/2");
         } catch(AssertionError | NoSuchFieldException | IllegalAccessException e){
             report.addError(String.format("Simulation: %-26s Incorrect message number after iteration", "MessageNumber"));
+            runBonus = false;
         }
 
     }
+
+
     
     @Override
     protected void executeTest(Class<?> clazz, Report report) {
         try{
             simulate(report);
         }catch (AssertionError e){
-            report.addPassedTest(String.format("Simulation: %-26s Failed", "Error on main"));
+            report.addError(String.format("Simulation: %-26s Failed", "Error on main"));
+            runBonus = false;
+        }
+        if(runBonus){
+            report.addMarks(10.0f);
+            report.addSummary("Successfully Runs: +10");
         }
     }
  

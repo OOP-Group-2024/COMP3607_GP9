@@ -37,7 +37,7 @@ public class ChatBotTest extends FileTest{
         addMethodTest("public", "boolean", List.of(), "limitReached", chatBot, 1.0f);
         addBehaviourTest(List.of("limitReached","messageNumber"), List.of(none,none), List.of(), 0, false, chatBot, 2.0f);
         addMethodTest("private", "java.lang.String", List.of(), "generateResponse", chatBot, 2.0f);
-        addBehaviourTest(List.of("generateResponse","numResponsesGenerated"), List.of(none,none), List.of(), 1, "1 ChatGPT-3.5" , chatBot, 2.0f); //messageNumber++
+        addBehaviourTest(List.of("generateResponse","numResponsesGenerated"), List.of(none,none), List.of(), 1, "2 ChatGPT-3.5" , chatBot, 2.0f); //messageNumber++
         addMethodTest("public", "java.lang.String", List.of(String.class), "prompt", chatBot, 1.0f); 
         addBehaviourTest(List.of("prompt","messageNumber"), List.of(none,List.of("hello").toArray()), Collections.emptyList(), 3 , "3 ChatGPT-3.5", chatBot, 2.0f); //messageNumber + 2 for returnTest invocation and valueTest invocation
         addMethodTest("public", "java.lang.String", List.of(), "toString", chatBot, 4.0f);
