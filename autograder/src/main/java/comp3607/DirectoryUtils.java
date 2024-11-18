@@ -255,7 +255,7 @@ public class DirectoryUtils {
                     filesToCompile.add(mainFile);
                     exist = true;
                 } else if (backupFile.exists()) {
-                    System.out.println("CLASS +"+mainFile.getName()+" is missing from student submission");
+                    System.out.println("CLASS '"+mainFile.getName()+"' is missing from student submission");
                     filesToCompile.add(backupFile);
                     exist = false;
                 } else {
