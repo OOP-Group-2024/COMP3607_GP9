@@ -61,6 +61,11 @@
       <artifactId>bcpkix-jdk18on</artifactId>
       <version>1.76</version>
     </dependency>
+    <dependency>
+      <artifactId>junit</artifactId>
+      <groupId>junit</groupId>
+      <version>4.11</version>
+    </dependency>
   </dependencies>
 
   <build>
