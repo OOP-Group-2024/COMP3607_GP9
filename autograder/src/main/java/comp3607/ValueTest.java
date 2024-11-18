@@ -43,7 +43,10 @@ public class ValueTest extends Test {
             Field field = constructor.getDeclaringClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             actualValue = field.get(instance);
-            Assertions.assertEquals(actualValue.toString(), expectedValue.toString());
+            String actualString = actualValue.toString();
+            actualString = actualString.replaceAll("\\s","").toLowerCase();
+            String expectedString = expectedValue.toString().replaceAll("\\s","").toLowerCase();
+            Assertions.assertEquals(actualString, expectedString);
             report.addPassedTest(String.format("Behaviour: %-27s Passed Test. %s: %s", methodName, fieldName, actualValue));
             checksPassed++;    
         }catch (AssertionError e) {
