@@ -26,7 +26,6 @@ public class ZipCollection implements ZipContainer {
     public void runTest() {
         ZipIterator iterator = createIterator(zipFolderPath.toString());
         System.out.println("\nStarting test execution:");
-        System.out.println("Initial Student ID from path: " + (studentId != null ? studentId : "unknown"));
     
         try {
             DirectoryUtils.getDependenciesPath();
@@ -89,15 +88,13 @@ public class ZipCollection implements ZipContainer {
                 report.addMarks(5.0f);
                 report.addSummary("All files compiled successfully +5");
             }
-            else{
-                report.addError(String.format("%d/%d files compiled successfully", compiled, classNamesInOrder.size()));;
-            }
             System.out.println("Processing submission for: " + 
-            (studentId != null ? "Student ID: " + studentId : "Unknown Student"));
+            (report.getStudentId() != null ? "Student ID: " + report.getStudentId() : "Unknown Student"));
             // Generate reports
             String reportContent = report.generateReport();
             saveReport(reportContent);
             System.out.println(reportContent);
+            System.out.println("==================DONE===================== \n");
         }
     }
 
