@@ -11,7 +11,7 @@ public abstract class Test {
     }
 
     protected void setup(Class<?> clazz) {
-        System.out.println("");
+        //System.out.println("");
     }
 
     protected abstract void executeTest(Class<?> clazz, Report report);
